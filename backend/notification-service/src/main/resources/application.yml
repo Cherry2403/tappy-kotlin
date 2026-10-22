@@ -1,3 +1,23 @@
 spring:
   application:
     name: notification-service
+  config:
+    import: optional:configtree:/run/secrets/
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${gmail:}
+    password: ${gmail_password:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+tappy:
+  public-site-url: ${PUBLIC_SITE_URL:http://localhost:3000}
+  notify-email: ${notify_email:}
+  from-email: ${gmail:}
