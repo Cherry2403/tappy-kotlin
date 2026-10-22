@@ -7,7 +7,7 @@ spring:
     host: localhost
     port: 5672
     username: guest
-    password: guest
+    password: ${rabbitmq_password:guest}
     listener:
       simple:
         default-requeue-rejected: false

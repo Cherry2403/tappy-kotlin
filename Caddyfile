@@ -16,8 +16,11 @@
 
   @api path /api/*
   handle @api {
+    request_body {
+      max_size 16KB
+    }
     uri strip_prefix /api
-    reverse_proxy api:3000
+    reverse_proxy reservation-service:8080
   }
 
   @static path /_next/static/* /hero-video/*

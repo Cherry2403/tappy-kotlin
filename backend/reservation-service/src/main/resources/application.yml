@@ -4,11 +4,13 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: true
+  config:
+    import: optional:configtree:/run/secrets/
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
-    password: guest
+    password: ${rabbitmq_password:guest}
     connection-timeout: 5s
 
 server:
