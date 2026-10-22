@@ -8,6 +8,15 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+      simple:
+        default-requeue-rejected: false
+        retry:
+          enabled: true
+          max-retries: 2
+          initial-interval: 5s
+          multiplier: 2
+          max-interval: 20s
   mail:
     host: smtp.gmail.com
     port: 587
