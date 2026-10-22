@@ -5,3 +5,7 @@ secrets/*.txt
 # Redis snapshots (runtime data, not source)
 dump.rdb
 *.rdb
+
+# Local agent notes
+AGENT.md
+CLAUDE.local.md
