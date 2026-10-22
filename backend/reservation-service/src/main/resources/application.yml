@@ -1,6 +1,12 @@
 spring:
   application:
     name: reservation-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 5s
 
 server:
   port: 8080

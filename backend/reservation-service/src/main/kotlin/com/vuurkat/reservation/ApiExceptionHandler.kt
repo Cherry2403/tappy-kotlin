@@ -1,5 +1,6 @@
 package com.vuurkat.reservation
 
+import org.springframework.amqp.AmqpException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -14,5 +15,12 @@ class ApiExceptionHandler {
 	fun handleValidation(ex: MethodArgumentNotValidException) = mapOf(
 		"statusCode" to 400,
 		"message" to ex.bindingResult.fieldErrors.map { "${it.field}: ${it.defaultMessage}" },
+	)
+
+	@ExceptionHandler(AmqpException::class)
+	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+	fun handleQueueDown(ex: AmqpException) = mapOf(
+		"statusCode" to 503,
+		"message" to "Reservations are temporarily unavailable. Please try again.",
 	)
 }
