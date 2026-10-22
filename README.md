@@ -33,8 +33,8 @@ There is no database because the product only needs to send emails.
 
 - `name` ≤ 100 chars, `email` valid and ≤ 254 chars, `note` optional and ≤ 2000 chars, `consent` must be `true`
 - unknown fields are rejected, body is limited to 16 KB
-- responses: `202` `{ "reservationId", "status": "accepted" }`, `400` invalid input,
-  `429` more than 5 requests/min (in-memory, per instance), `503` queue unavailable
+- responses: `202` `{ "reservationId", "status": "accepted" }`, `400` invalid input, `413` body too large,
+  `429` more than 5 reservations/min or 30 requests/min per IP (in-memory, per instance), `503` queue unavailable
 
 `GET /api/health` returns `{ "status": "ok" }`.
 
@@ -44,9 +44,39 @@ There is no database because the product only needs to send emails.
 cp secrets/gmail.txt.example secrets/gmail.txt                    # sender Gmail address
 cp secrets/gmail_password.txt.example secrets/gmail_password.txt  # Gmail app password
 cp secrets/notify_email.txt.example secrets/notify_email.txt      # owner inbox
+openssl rand -hex 24 > secrets/rabbitmq_password.txt              # RabbitMQ password
 docker compose up --build
 ```
 
-Then open http://localhost. To build and test the backend only (JDK 21): `cd backend && ./gradlew build`.
+Then open http://localhost:5302.
 
+Secrets are mounted as Docker secrets and read by Spring through `configtree:/run/secrets/`,
+so no credentials live in environment variables or config files.
+
+To build and run the tests without Docker (JDK 21):
+
+```bash
+cd backend && ./gradlew build
+```
+
+## Project structure
+
+```
+backend/
+  reservation-service/    REST API, validation, rate limiting, publishes ReservationCreated
+  notification-service/   RabbitMQ listener, retry + dead-letter queue, email templates
+  Dockerfile              shared multi-stage build (ARG SERVICE)
+frontend/                 Next.js landing page
+Caddyfile                 gateway: /api/* -> reservation-service, everything else -> frontend
+compose.yaml              gateway, frontend, rabbitmq, both services (internal networks, read-only containers)
+```
+
+## Next steps
+
+- **Transactional outbox** if reservations are ever stored, so saving and publishing cannot get out of sync
+- **Publisher confirms** so the API only answers `202` once RabbitMQ has accepted the message
+- **Idempotent consumer**, so a retry never sends the owner a duplicate email
+- **Testcontainers** integration tests against a real RabbitMQ
+- Shared rate limiting (gateway or Redis) when running more than one instance
+- Kubernetes deployment, metrics and tracing
 
