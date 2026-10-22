@@ -2,10 +2,6 @@
 secrets/*.txt
 !secrets/*.txt.example
 
-# Redis snapshots (runtime data, not source)
-dump.rdb
-*.rdb
-
 # Local agent notes
 AGENT.md
 CLAUDE.local.md
