@@ -1,6 +1,9 @@
 spring:
   application:
     name: reservation-service
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
   rabbitmq:
     host: localhost
     port: 5672
@@ -10,3 +13,4 @@ spring:
 
 server:
   port: 8080
+  forward-headers-strategy: native
