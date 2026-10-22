@@ -1,0 +1,18 @@
+package com.vuurkat.reservation
+
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestControllerAdvice
+
+@RestControllerAdvice
+class ApiExceptionHandler {
+
+	@ExceptionHandler(MethodArgumentNotValidException::class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	fun handleValidation(ex: MethodArgumentNotValidException) = mapOf(
+		"statusCode" to 400,
+		"message" to ex.bindingResult.fieldErrors.map { "${it.field}: ${it.defaultMessage}" },
+	)
+}
