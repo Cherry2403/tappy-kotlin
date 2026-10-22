@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&amp;family=Italiana&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #FFFFFF; color: #1E1C17; font-family: 'Montserrat', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #5E1F35; }
+  a:hover { color: #7a2846; }
+  @keyframes owTapRing {
+    0% { transform: translate(-50%, -50%) scale(0.55); opacity: 0; }
+    20% { opacity: 0.7; }
+    70% { transform: translate(-50%, -50%) scale(2.1); opacity: 0; }
+    100% { opacity: 0; }
+  }
+</style>
+</helmet>
+
+<section style="padding: 72px 64px 40px; display: flex; flex-direction: column; gap: 52px;">
+
+  
+
+  <div id="2a" style="display: flex; flex-direction: column; gap: 20px; width: 402px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      
+      
+    </div>
+
+    <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+      <div style="height: 874px; background: #FFFFFF; overflow: auto; box-sizing: border-box;">
+
+        <div style="position: relative; height: 460px;">
+          <image-slot id="ow2-hero" shape="rect" placeholder="Drop the place photo" style="position: absolute; inset: 0; width: 100%; height: 100%;"></image-slot>
+          <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(30,28,23,0.6) 0%, rgba(30,28,23,0.05) 38%, rgba(30,28,23,0.96) 100%);"></div>
+          <div style="position: absolute; top: 64px; left: 22px; right: 22px; display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: rgba(240,234,216,0.8);">Olive-Wine</span>
+            <div style="display: flex; gap: 10px;">
+              <button type="button" onClick="{{ openAccount }}" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(240,234,216,0.35); background: rgba(30,28,23,0.3); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F0EAD8" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="9" r="3.4"></circle><path d="M5.5 20a6.5 6.5 0 0 1 13 0"></path></svg>
+              </button>
+              <button type="button" onClick="{{ openMenu }}" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(240,234,216,0.35); background: rgba(30,28,23,0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 3px;">
+                <span style="width: 3px; height: 3px; border-radius: 50%; background: #F0EAD8; display: block;"></span>
+                <span style="width: 3px; height: 3px; border-radius: 50%; background: #F0EAD8; display: block;"></span>
+                <span style="width: 3px; height: 3px; border-radius: 50%; background: #F0EAD8; display: block;"></span>
+              </button>
+            </div>
+          </div>
+          <div style="position: absolute; left: 24px; right: 24px; bottom: 30px; color: #F0EAD8;">
+            <div style="font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(240,234,216,0.7); margin-bottom: 12px;">Story of the land</div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div contentEditable="{{ renaming }}" suppressContentEditableWarning="{{ true }}" onBlur="{{ stopRename }}" onKeyDown="{{ renameKey }}" style="{{ titleStyle }}">{{ souvenirName }}</div>
+              <button type="button" onClick="{{ startRename }}" style="{{ penStyle }}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F0EAD8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10-4-4L4 16z"></path><path d="m14 6 4 4"></path></svg>
+              </button>
+            </div>
+            <div style="font-family: 'Marcellus', serif; font-size: 13px; letter-spacing: 0.1em; color: rgba(240,234,216,0.7); margin-top: 10px;">AMSTERDAM · SINCE 1662</div>
+          </div>
+        </div>
+
+        <sc-if value="{{ unclaimed }}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{ startClaim }}" style="width: 100%; box-sizing: border-box; background: #F7F5EC; border: none; border-bottom: 1px solid rgba(92,90,46,0.25); padding: 16px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; text-align: left;">
+            <span style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(92,90,46,0.45); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5C5A2E" stroke-width="1.3" stroke-linecap="round"><path d="M12 6v12"></path><path d="M6 12h12"></path></svg>
+            </span>
+            <span style="flex: 1; font-family: 'Montserrat', sans-serif; font-size: 12.5px; line-height: 1.55; color: rgba(30,28,23,0.75);">This souvenir isn't in an account yet. <span style="color: #5E1F35;">Keep it in yours</span></span>
+            <span style="font-family: Georgia, serif; font-size: 18px; color: rgba(30,28,23,0.4);">›</span>
+          </button>
+        </sc-if>
+
+        <div style="background: #FFFFFF; color: #1E1C17; padding: 36px 24px 46px; display: flex; flex-direction: column; gap: 26px;">
+          <div style="display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: start;">
+            <div style="font-family: 'Marcellus', serif; font-size: 12px; letter-spacing: 0.12em; color: #5C5A2E; padding-top: 6px;">01</div>
+            <div>
+              <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.45px currentColor; font-size: 27px; line-height: 1.15; letter-spacing: 0.01em; margin-bottom: 8px;">Tax by width</div>
+              <div style="font-family: 'Montserrat', sans-serif; font-size: 13.5px; line-height: 1.75; color: rgba(30,28,23,0.7);">Long ago, tax was based on how wide the front of the house was. So people built the front skinny, and made the house long in the back instead.</div>
+            </div>
+          </div>
+          <div style="height: 1px; background: rgba(92,90,46,0.22);"></div>
+          <div style="display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: start;">
+            <div style="font-family: 'Marcellus', serif; font-size: 12px; letter-spacing: 0.12em; color: #5C5A2E; padding-top: 6px;">02</div>
+            <div>
+              <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.45px currentColor; font-size: 27px; line-height: 1.15; letter-spacing: 0.01em; margin-bottom: 8px;">House leans forward</div>
+              <div style="font-family: 'Montserrat', sans-serif; font-size: 13.5px; line-height: 1.75; color: rgba(30,28,23,0.7);">Staircases are far Houses lean on purpose so furniture pulled up by rope swings away from the wall, and rain drips off the front instead of soaking it. They also lean from age: wood poles in the mud rot and sink unevenly, and old wood and brick sag after centuries.too steep for furniture. Sofas and beds still go up on a pulley and in through the window.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #FFFFFF; padding: 40px 22px 30px;">
+
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 22px;">
+            <div>
+              <div style="font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 8px;">Story of you</div>
+              <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.6px currentColor; font-size: 40px; line-height: 1; letter-spacing: 0.01em; color: #1E1C17;">Your book</div>
+            </div>
+            <div style="font-family: 'Marcellus', serif; font-size: 12px; letter-spacing: 0.14em; color: rgba(30,28,23,0.5); padding-bottom: 6px;">{{ bookLabel }}</div>
+          </div>
+
+          <!--BOOKSTAGE-->
+          <div onPointerDown="{{ bookDown }}" onDragStart="{{ noDrag }}" onPointerMove="{{ bookMove }}" onPointerUp="{{ bookUp }}" onPointerCancel="{{ bookUp }}" style="position: relative; width: 100%; aspect-ratio: 3 / 4.1; perspective: 1800px; touch-action: pan-y; user-select: none; cursor: grab;">
+            <div style="position: absolute; inset: 0; border-radius: 4px; background: rgba(92,90,46,0.16); box-shadow: 0 18px 40px rgba(30,28,23,0.14);"></div>
+            <div style="position: absolute; top: 6px; bottom: 6px; right: -4px; width: 5px; border-radius: 0 3px 3px 0; background: repeating-linear-gradient(to right, #FFFFFF 0 1px, rgba(92,90,46,0.35) 1px 2px);"></div>
+
+            <!-- 00 · front cover -->
+            <div style="{{ pgc }}">
+              <div style="position: absolute; inset: 0; background: #5E1F35;"></div>
+              <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 16px; background: linear-gradient(to right, rgba(0,0,0,0.35), rgba(0,0,0,0));"></div>
+              <div style="position: absolute; inset: 0; padding: 34px 28px; display: flex; flex-direction: column; justify-content: space-between; color: #F0EAD8;">
+                <div style="font-family: 'Marcellus', serif; font-size: 8px; letter-spacing: 0.32em; text-transform: uppercase; color: rgba(240,234,216,0.7);">Olive-Wine · edition n°1</div>
+                <svg viewBox="0 0 210 130" style="width: 100%; height: auto;" fill="none" stroke="#F0EAD8" stroke-linecap="round" stroke-linejoin="round">
+                  <g>
+                    <g stroke-width="1.5" opacity="0.95">
+                      <path d="M18 124 L18 48 L33 31 L48 48 L48 124 Z"></path>
+                      <path d="M52 124 L52 40 L67 22 L82 40 L82 124 Z"></path>
+                      <path d="M86 124 L86 55 L101 36 L116 55 L116 124 Z"></path>
+                      <path d="M120 124 L120 44 L135 27 L150 44 L150 124 Z"></path>
+                      <path d="M154 124 L154 59 L169 42 L184 59 L184 124 Z"></path>
+                    </g>
+                    <g stroke-width="1.1" opacity="0.8">
+                      <path d="M26 64 h13 M26 86 h13 M26 106 h13"></path>
+                      <path d="M60 56 h13 M60 78 h13 M60 100 h13"></path>
+                      <path d="M94 70 h13 M94 92 h13"></path>
+                      <path d="M128 60 h13 M128 82 h13 M128 104 h13"></path>
+                      <path d="M162 74 h13 M162 96 h13"></path>
+                    </g>
+                    <g stroke-width="1.2" opacity="0.85">
+                      <path d="M33 25 v-9 M33 16 h8 M41 16 v4"></path>
+                      <path d="M6 124 h198"></path>
+                    </g>
+                  </g>
+                </svg>
+                <div>
+                  <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.6px currentColor; font-size: 38px; line-height: 1; letter-spacing: 0.02em;">{{ placeName }}</div>
+                  <div style="font-family: 'Marcellus', serif; font-size: 11px; letter-spacing: 0.08em; color: rgba(240,234,216,0.75); margin-top: 8px;">two days, one hook, no plan</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 01 · letter -->
+            <div style="{{ pg0 }}">
+              <div style="position: absolute; inset: 13px; border: 1px solid rgba(92,90,46,0.4); border-radius: 14px;"></div>
+              <div style="position: absolute; inset: 34px 32px; display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: flex-end; font-family: 'Marcellus', serif; font-size: 12px; letter-spacing: 0.12em; color: rgba(30,28,23,0.5);">2 JULY 2026</div>
+                <div style="margin-top: auto; margin-bottom: auto;">
+                  <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.6px currentColor; font-size: 40px; line-height: 1.05; letter-spacing: 0.01em; color: #1E1C17;">Dear future<br>kid,</div>
+                  <div style="width: 36px; height: 1px; background: rgba(92,90,46,0.6); margin: 20px 0;"></div>
+                  <div style="font-family: 'Montserrat', sans-serif; font-size: 13px; line-height: 1.85; color: rgba(30,28,23,0.75);">We came here with no plan and stayed by the water until it got dark. Your mother swears the hook above us was for hauling sofas up the front of the house. She was right.</div>
+                </div>
+                <div style="font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(30,28,23,0.4);">AMSTERDAM · page one</div>
+              </div>
+            </div>
+
+            <!-- 02 · full bleed -->
+            <div style="{{ pg1 }}">
+              <image-slot id="ow2-p2" shape="rect" placeholder="Drop photo" style="position: absolute; inset: 0; width: 100%; height: 100%;"></image-slot>
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,28,23,0.78) 0%, rgba(30,28,23,0) 45%);"></div>
+              <div style="position: absolute; left: 26px; right: 26px; bottom: 28px; color: #F0EAD8;">
+                <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.5px currentColor; font-size: 32px; line-height: 1.05; letter-spacing: 0.01em;">The morning<br>we found it</div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px;">
+                  <span style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #F0EAD8; border: 1px solid rgba(240,234,216,0.6); border-radius: 3px; padding: 4px 7px;">on site</span>
+                  <span style="font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(240,234,216,0.75);">Jul 27 · 08:14</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 03 · editorial pair -->
+            <div style="{{ pg2 }}">
+              <div style="position: absolute; inset: 0; padding: 26px 24px; display: flex; flex-direction: column;">
+                <div style="display: flex; align-items: flex-start; gap: 14px;">
+                  <div style="font-family: 'Italiana', serif; font-size: 62px; line-height: 0.8; color: rgba(92,90,46,0.5);">03</div>
+                  <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; line-height: 1.7; letter-spacing: 0.02em; color: rgba(30,28,23,0.6); padding-top: 6px;">two hours later,<br>same street</div>
+                </div>
+                <div style="position: relative; flex: 1; margin-top: 16px;">
+                  <div style="position: absolute; top: 0; left: 0; width: 62%; height: 58%;"><image-slot id="ow2-p3a" shape="rect" placeholder="Drop photo" style="position: absolute; inset: 0; width: 100%; height: 100%;"></image-slot></div>
+                  <div style="position: absolute; bottom: 0; right: 0; width: 58%; height: 52%; box-shadow: -8px -8px 0 #FFFFFF;"><image-slot id="ow2-p3b" shape="rect" placeholder="Drop photo" style="position: absolute; inset: 0; width: 100%; height: 100%;"></image-slot></div>
+                </div>
+                <div style="font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(30,28,23,0.4); margin-top: 16px;">the hook, twice</div>
+              </div>
+            </div>
+
+            <!-- 04 · quote -->
+            <div style="{{ pg3 }}">
+              <div style="position: absolute; inset: 0; background: #5E1F35;"></div>
+              <div style="position: absolute; inset: 13px; border: 1px solid rgba(240,234,216,0.35); border-radius: 14px;"></div>
+              <div style="position: absolute; inset: 40px 34px; display: flex; flex-direction: column; justify-content: center; color: #F0EAD8;">
+                <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.6px currentColor; font-size: 36px; line-height: 1.18; letter-spacing: 0.01em;">“We stayed until the lights came on in every window.”</div>
+                <div style="width: 36px; height: 1px; background: rgba(240,234,216,0.6); margin: 24px 0 16px;"></div>
+                <div style="font-family: 'Marcellus', serif; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(240,234,216,0.7);">Jul 27 · 21:40</div>
+              </div>
+            </div>
+
+            <!-- 05 · add yours -->
+            <div style="{{ pg4 }}">
+              <div style="position: absolute; inset: 13px; border: 1px dashed rgba(92,90,46,0.5); border-radius: 14px;"></div>
+              <div style="position: absolute; inset: 40px 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 20px;">
+                <div style="width: 62px; height: 62px; border-radius: 50%; border: 1px solid rgba(92,90,46,0.5); display: flex; align-items: center; justify-content: center;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5C5A2E" stroke-width="1.2" stroke-linecap="round"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z"></path><circle cx="12" cy="13" r="3.4"></circle></svg>
+                </div>
+                <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.5px currentColor; font-size: 32px; line-height: 1.1; letter-spacing: 0.01em; color: #1E1C17;">Add today</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 12.5px; line-height: 1.75; color: rgba(30,28,23,0.6); max-width: 210px;">Photos taken here are stamped with the place and the hour.</div>
+              </div>
+            </div>
+
+            <!-- 06 · back cover -->
+            <div style="{{ pgb }}">
+              <div style="position: absolute; inset: 0; background: #5E1F35;"></div>
+              <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; color: rgba(240,234,216,0.8);">
+                <div style="width: 40px; height: 1px; background: rgba(240,234,216,0.5);"></div>
+                <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.4px currentColor; font-size: 22px; letter-spacing: 0.14em;">OLIVE-WINE</div>
+                <div style="font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(240,234,216,0.55);">the end, for now</div>
+              </div>
+            </div>
+
+            <div style="{{ spineStyle }}"></div>
+
+            <button type="button" onClick="{{ bookPrev }}" style="{{ bookPrevStyle }}">‹</button>
+            <button type="button" onClick="{{ bookNext }}" style="{{ bookNextStyle }}">›</button>
+          </div>
+          <!--/BOOKSTAGE-->
+
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
+            <div style="display: flex; gap: 7px;">
+              <span style="{{ bd0 }}"></span><span style="{{ bd1 }}"></span><span style="{{ bd2 }}"></span><span style="{{ bd3 }}"></span><span style="{{ bd4 }}"></span><span style="{{ bd5 }}"></span><span style="{{ bd6 }}"></span>
+            </div>
+            <div style="font-family: 'Marcellus', serif; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(30,28,23,0.42);">{{ bookHint }}</div>
+          </div>
+
+          <div style="margin-top: 26px; padding-bottom: 40px;">
+            <button type="button" onClick="{{ openSheet }}" style="width: 100%; background: #5C5A2E; color: #F0EAD8; border: none; border-radius: 14px; padding: 18px; font-family: 'Marcellus', serif; font-size: 15px; letter-spacing: 0.04em; text-align: center; cursor: pointer;">Edit your book</button>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; font-family: 'Montserrat', sans-serif; font-size: 11.5px; color: rgba(30,28,23,0.55);">
+              <span>{{ textLeft }} text pages</span><span style="color: rgba(30,28,23,0.3);">·</span><span>{{ photoLeft }} photo pages</span><span style="color: rgba(30,28,23,0.3);">·</span><span>free with your souvenir</span>
+            </div>
+          </div>
+
+        </div>
+
+        <sc-if value="{{ accountOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; inset: 0; z-index: 75; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div onClick="{{ closeAccount }}" style="position: absolute; inset: 0; background: rgba(30,28,23,0.5);"></div>
+            <div style="position: relative; background: #FFFFFF; border-radius: 24px 24px 0 0; padding: 14px 22px 32px;">
+              <div style="width: 40px; height: 4px; border-radius: 4px; background: rgba(30,28,23,0.18); margin: 0 auto 20px;"></div>
+              <div style="display: flex; align-items: center; gap: 14px; padding-bottom: 20px; border-bottom: 1px solid rgba(92,90,46,0.2);">
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: #F7F5EC; border: 1px solid rgba(92,90,46,0.35); display: flex; align-items: center; justify-content: center; font-family: 'Italiana', serif; font-size: 20px; color: #5C5A2E; flex-shrink: 0;">MT</div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.4px currentColor; font-size: 26px; letter-spacing: 0.01em; line-height: 1.1;">Mai Tran</div>
+                  <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; color: rgba(30,28,23,0.55); margin-top: 3px;">{{ ownedCount }} souvenirs kept</div>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <button type="button" onClick="{{ openProfile }}" style="{{ menuItem }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="9" r="3.4"></circle><path d="M5.5 20a6.5 6.5 0 0 1 13 0"></path></svg>
+                  <span style="flex: 1; text-align: left;">Your profile</span>
+                  <span style="font-family: Georgia, serif; font-size: 18px; opacity: 0.4;">›</span>
+                </button>
+                <button type="button" onClick="{{ openSettings }}" style="{{ menuItem }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="12" r="3"></circle><path d="M12 3.5v2.2M12 18.3v2.2M20.5 12h-2.2M5.7 12H3.5M18 6l-1.6 1.6M7.6 16.4 6 18M18 18l-1.6-1.6M7.6 7.6 6 6"></path></svg>
+                  <span style="flex: 1; text-align: left;">Settings and privacy</span>
+                  <span style="font-family: Georgia, serif; font-size: 18px; opacity: 0.4;">›</span>
+                </button>
+                <button type="button" onClick="{{ openCollection }}" style="{{ menuPrimary }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><path d="M12 3.5a15 15 0 0 1 0 17a15 15 0 0 1 0-17z"></path></svg>
+                  <span style="flex: 1; text-align: left;">Your world</span>
+                  <span style="font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7;">{{ ownedCount }} / 40</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; inset: 0; z-index: 70; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div onClick="{{ closeMenu }}" style="position: absolute; inset: 0; background: rgba(30,28,23,0.5);"></div>
+            <div style="position: relative; background: #FFFFFF; border-radius: 24px 24px 0 0; padding: 14px 22px 30px;">
+              <div style="width: 40px; height: 4px; border-radius: 4px; background: rgba(30,28,23,0.18); margin: 0 auto 20px;"></div>
+              <div style="display: flex; align-items: center; gap: 14px; padding-bottom: 20px; border-bottom: 1px solid rgba(92,90,46,0.2);">
+                <div style="width: 46px; height: 46px; border-radius: 10px; background: #5E1F35; color: #F0EAD8; display: flex; align-items: center; justify-content: center; font-family: 'Italiana', serif; font-size: 20px; flex-shrink: 0;">H</div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.4px currentColor; font-size: 24px; letter-spacing: 0.01em;">{{ placeName }}</div>
+                  <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; color: rgba(30,28,23,0.55); margin-top: 3px;">{{ ownerLine }}</div>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <button type="button" onClick="{{ startClaim }}" style="{{ menuPrimary }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M12 6v12"></path><path d="M6 12h12"></path></svg>
+                  <span style="flex: 1; text-align: left;">{{ claimLabel }}</span>
+                  <span style="font-family: Georgia, serif; font-size: 18px; opacity: 0.5;">›</span>
+                </button>
+                <button type="button" onClick="{{ openCollection }}" style="{{ menuItem }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><path d="M12 3.5a15 15 0 0 1 0 17a15 15 0 0 1 0-17z"></path></svg>
+                  <span style="flex: 1; text-align: left;">See my collection</span>
+                  <span style="font-family: Georgia, serif; font-size: 18px; opacity: 0.4;">›</span>
+                </button>
+                <sc-if value="{{ claimed }}" hint-placeholder-val="{{ false }}">
+                  <button type="button" onClick="{{ releaseSouvenir }}" style="{{ menuDanger }}">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M15 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8"></path><path d="M15 12h6"></path><path d="m18 9 3 3-3 3"></path></svg>
+                    <span style="flex: 1; text-align: left;">Release from my account</span>
+                  </button>
+                </sc-if>
+              </div>
+              <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; line-height: 1.7; color: rgba(30,28,23,0.45); margin-top: 16px;">A souvenir belongs to whoever holds it. Release it and the next person can keep it — the pages stay with the book.</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ claimOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; inset: 0; z-index: 80; background: #FFFFFF; display: flex; flex-direction: column; box-sizing: border-box; padding: 62px 24px 34px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px;">
+              <button type="button" onClick="{{ claimBack }}" style="width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(92,90,46,0.3); background: transparent; font-family: Georgia, serif; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">‹</button>
+              <div style="display: flex; gap: 6px;">
+                <span style="{{ cs0 }}"></span><span style="{{ cs1 }}"></span><span style="{{ cs2 }}"></span>
+              </div>
+              <button type="button" onClick="{{ closeClaim }}" style="background: transparent; border: none; font-family: 'Marcellus', serif; font-size: 13px; color: rgba(30,28,23,0.5); cursor: pointer; width: 38px;">Skip</button>
+            </div>
+
+            <sc-if value="{{ claimStep0 }}" hint-placeholder-val="{{ true }}">
+              <div style="flex: 1; display: flex; flex-direction: column;">
+                <div style="font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 18px;">Keep this souvenir</div>
+                <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.7px currentColor; font-size: 46px; line-height: 1.02; letter-spacing: 0.01em; color: #1E1C17;">{{ placeName }}</div>
+                <div style="width: 72px; height: 1px; background: rgba(92,90,46,0.55); margin: 22px 0;"></div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 14px; line-height: 1.8; color: rgba(30,28,23,0.7);">Add it to your account and the book follows you — on any phone, from any link. Give the souvenir away later and you can release it in one tap.</div>
+                <div style="display: flex; flex-direction: column; gap: 14px; margin: 34px 0 0;">
+                  <div style="display: flex; gap: 12px; align-items: flex-start;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #5C5A2E; margin-top: 7px;"></span><span style="font-family: 'Montserrat', sans-serif; font-size: 13px; line-height: 1.65; color: rgba(30,28,23,0.65);">Your pages are saved, not tied to this phone</span></div>
+                  <div style="display: flex; gap: 12px; align-items: flex-start;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #5C5A2E; margin-top: 7px;"></span><span style="font-family: 'Montserrat', sans-serif; font-size: 13px; line-height: 1.65; color: rgba(30,28,23,0.65);">Every souvenir you own lands on one map</span></div>
+                  <div style="display: flex; gap: 12px; align-items: flex-start;"><span style="width: 5px; height: 5px; border-radius: 50%; background: #5C5A2E; margin-top: 7px;"></span><span style="font-family: 'Montserrat', sans-serif; font-size: 13px; line-height: 1.65; color: rgba(30,28,23,0.65);">Nothing is locked — pass it on whenever you like</span></div>
+                </div>
+                <button type="button" onClick="{{ claimNext }}" style="margin-top: auto; width: 100%; background: #5E1F35; color: #FFFFFF; border: none; border-radius: 14px; padding: 18px; font-family: 'Marcellus', serif; font-size: 15px; letter-spacing: 0.04em; cursor: pointer;">Continue</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ claimStep1 }}" hint-placeholder-val="{{ false }}">
+              <div style="flex: 1; display: flex; flex-direction: column;">
+                <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.6px currentColor; font-size: 40px; line-height: 1.05; letter-spacing: 0.01em; color: #1E1C17;">Who is keeping it?</div>
+                <div style="width: 72px; height: 1px; background: rgba(92,90,46,0.55); margin: 20px 0 26px;"></div>
+                <div style="font-family: 'Marcellus', serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(30,28,23,0.5); margin-bottom: 8px;">Email</div>
+                <input type="email" placeholder="you@email.com" style="width: 100%; box-sizing: border-box; padding: 12px 0; border: none; border-bottom: 1px solid rgba(92,90,46,0.35); background: transparent; font-family: 'Marcellus', serif; font-size: 18px; color: #1E1C17; outline: none;">
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 11.5px; line-height: 1.7; color: rgba(30,28,23,0.5); margin-top: 12px;">We send a one-time code. No password to remember.</div>
+                <div style="display: flex; align-items: center; gap: 14px; margin: 30px 0;">
+                  <span style="flex: 1; height: 1px; background: rgba(92,90,46,0.2);"></span>
+                  <span style="font-family: 'Marcellus', serif; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(30,28,23,0.4);">or</span>
+                  <span style="flex: 1; height: 1px; background: rgba(92,90,46,0.2);"></span>
+                </div>
+                <button type="button" onClick="{{ claimNext }}" style="width: 100%; background: transparent; border: 1px solid rgba(92,90,46,0.35); border-radius: 14px; padding: 16px; font-family: 'Marcellus', serif; font-size: 14px; letter-spacing: 0.03em; color: #1E1C17; cursor: pointer;">Continue with Apple</button>
+                <button type="button" onClick="{{ claimNext }}" style="width: 100%; margin-top: 10px; background: transparent; border: 1px solid rgba(92,90,46,0.35); border-radius: 14px; padding: 16px; font-family: 'Marcellus', serif; font-size: 14px; letter-spacing: 0.03em; color: #1E1C17; cursor: pointer;">Continue with Google</button>
+                <button type="button" onClick="{{ claimNext }}" style="margin-top: auto; width: 100%; background: #5E1F35; color: #FFFFFF; border: none; border-radius: 14px; padding: 18px; font-family: 'Marcellus', serif; font-size: 15px; letter-spacing: 0.04em; cursor: pointer;">Send me the code</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ claimStep2 }}" hint-placeholder-val="{{ false }}">
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 22px;">
+                <div style="width: 62px; height: 62px; border-radius: 50%; border: 1px solid #5C5A2E; display: flex; align-items: center; justify-content: center;">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5C5A2E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L19 7"></path></svg>
+                </div>
+                <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.6px currentColor; font-size: 40px; line-height: 1.08; letter-spacing: 0.01em; color: #1E1C17;">{{ placeName }} is yours</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 13.5px; line-height: 1.8; color: rgba(30,28,23,0.65); max-width: 270px;">Souvenir number {{ ownedCount }} on your map. The book and every page came with it.</div>
+                <button type="button" onClick="{{ finishClaim }}" style="width: 100%; margin-top: 18px; background: #5E1F35; color: #FFFFFF; border: none; border-radius: 14px; padding: 18px; font-family: 'Marcellus', serif; font-size: 15px; letter-spacing: 0.04em; cursor: pointer;">See it on the map</button>
+                <button type="button" onClick="{{ closeClaim }}" style="width: 100%; background: transparent; border: none; color: rgba(30,28,23,0.55); font-family: 'Marcellus', serif; font-size: 13px; cursor: pointer; padding: 4px;">Back to the book</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; inset: 0; z-index: 88; background: #FFFFFF; display: flex; flex-direction: column; box-sizing: border-box;">
+            <div style="flex-shrink: 0; padding: 62px 24px 0; display: flex; align-items: center; justify-content: space-between;">
+              <button type="button" onClick="{{ closeProfile }}" style="width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(92,90,46,0.3); background: transparent; font-family: Georgia, serif; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">‹</button>
+              <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(30,28,23,0.55);">Your profile</div>
+              <div style="width: 38px;"></div>
+            </div>
+            <div style="flex: 1; overflow: auto; padding: 30px 24px 34px;">
+              <div style="display: flex; align-items: center; gap: 18px;">
+                <div style="width: 76px; height: 76px; border-radius: 50%; background: #F7F5EC; border: 1px solid rgba(92,90,46,0.35); display: flex; align-items: center; justify-content: center; font-family: 'Italiana', serif; font-size: 28px; color: #5C5A2E; flex-shrink: 0;">MT</div>
+                <div style="min-width: 0;">
+                  <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.6px currentColor; font-size: 36px; line-height: 1.05; letter-spacing: 0.01em;">Mai Tran</div>
+                  <div style="font-family: 'Montserrat', sans-serif; font-size: 12px; color: rgba(30,28,23,0.55); margin-top: 5px;">mai@example.com</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 10px; margin: 30px 0 34px;">
+                <div style="flex: 1; border: 1px solid rgba(92,90,46,0.25); border-radius: 14px; padding: 16px 14px;">
+                  <div style="font-family: 'Italiana', serif; font-size: 30px; line-height: 1; color: #5E1F35;">{{ ownedCount }}</div>
+                  <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 8px;">souvenirs</div>
+                </div>
+                <div style="flex: 1; border: 1px solid rgba(92,90,46,0.25); border-radius: 14px; padding: 16px 14px;">
+                  <div style="font-family: 'Italiana', serif; font-size: 30px; line-height: 1; color: #5C5A2E;">6</div>
+                  <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 8px;">pages made</div>
+                </div>
+                <div style="flex: 1; border: 1px solid rgba(92,90,46,0.25); border-radius: 14px; padding: 16px 14px;">
+                  <div style="font-family: 'Italiana', serif; font-size: 30px; line-height: 1; color: #5C5A2E;">3</div>
+                  <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 8px;">countries</div>
+                </div>
+              </div>
+
+              <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 6px;">Account</div>
+              <div style="display: flex; flex-direction: column;">
+                <div style="{{ rowStyle }}"><span style="flex: 1;">Name</span><span style="{{ rowValStyle }}">Mai Tran</span><span style="{{ rowChevron }}">›</span></div>
+                <div style="{{ rowStyle }}"><span style="flex: 1;">Email</span><span style="{{ rowValStyle }}">mai@example.com</span><span style="{{ rowChevron }}">›</span></div>
+                <div style="{{ rowStyle }}"><span style="flex: 1;">Home city</span><span style="{{ rowValStyle }}">Amsterdam</span><span style="{{ rowChevron }}">›</span></div>
+                <div style="{{ rowStyle }}"><span style="flex: 1;">Language</span><span style="{{ rowValStyle }}">English</span><span style="{{ rowChevron }}">›</span></div>
+              </div>
+
+              <button type="button" onClick="{{ openCollection }}" style="width: 100%; margin-top: 28px; background: #F7F5EC; border: 1px solid rgba(92,90,46,0.25); border-radius: 14px; padding: 18px; cursor: pointer; display: flex; align-items: center; gap: 14px; text-align: left;">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#5C5A2E" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><path d="M12 3.5a15 15 0 0 1 0 17a15 15 0 0 1 0-17z"></path></svg>
+                <span style="flex: 1; font-family: 'Italiana', serif; font-size: 22px; letter-spacing: 0.01em;">Your world</span>
+                <span style="font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.1em; color: rgba(30,28,23,0.5);">{{ ownedCount }} / 40</span>
+              </button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ settingsOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; inset: 0; z-index: 88; background: #FFFFFF; display: flex; flex-direction: column; box-sizing: border-box;">
+            <div style="flex-shrink: 0; padding: 62px 24px 0; display: flex; align-items: center; justify-content: space-between;">
+              <button type="button" onClick="{{ closeSettings }}" style="width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(92,90,46,0.3); background: transparent; font-family: Georgia, serif; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">‹</button>
+              <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(30,28,23,0.55);">Settings and privacy</div>
+              <div style="width: 38px;"></div>
+            </div>
+            <div style="flex: 1; overflow: auto; padding: 26px 24px 34px;">
+
+              <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 6px;">Who can see your book</div>
+              <div style="display: flex; flex-direction: column; margin-bottom: 28px;">
+                <button type="button" onClick="{{ setVisAnyone }}" style="{{ visAnyoneStyle }}">
+                  <span style="{{ visDotAnyone }}"></span>
+                  <span style="flex: 1; text-align: left;"><span style="display: block; font-family: 'Italiana', serif; font-size: 21px; letter-spacing: 0.01em;">Anyone with the link</span><span style="display: block; font-family: 'Montserrat', sans-serif; font-size: 11.5px; line-height: 1.6; color: rgba(30,28,23,0.55); margin-top: 3px;">Whoever taps the souvenir can read it</span></span>
+                </button>
+                <button type="button" onClick="{{ setVisPeople }}" style="{{ visPeopleStyle }}">
+                  <span style="{{ visDotPeople }}"></span>
+                  <span style="flex: 1; text-align: left;"><span style="display: block; font-family: 'Italiana', serif; font-size: 21px; letter-spacing: 0.01em;">People I invite</span><span style="display: block; font-family: 'Montserrat', sans-serif; font-size: 11.5px; line-height: 1.6; color: rgba(30,28,23,0.55); margin-top: 3px;">Family and friends you name</span></span>
+                </button>
+                <button type="button" onClick="{{ setVisOnly }}" style="{{ visOnlyStyle }}">
+                  <span style="{{ visDotOnly }}"></span>
+                  <span style="flex: 1; text-align: left;"><span style="display: block; font-family: 'Italiana', serif; font-size: 21px; letter-spacing: 0.01em;">Only me</span><span style="display: block; font-family: 'Montserrat', sans-serif; font-size: 11.5px; line-height: 1.6; color: rgba(30,28,23,0.55); margin-top: 3px;">The land story still opens for everyone</span></span>
+                </button>
+              </div>
+
+              <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 6px;">Your pages</div>
+              <div style="display: flex; flex-direction: column; margin-bottom: 28px;">
+                <button type="button" onClick="{{ toggleLetter }}" style="{{ rowBtnStyle }}"><span style="flex: 1; text-align: left;">Show my letter to visitors</span><span style="{{ swLetter }}"><span style="{{ swLetterKnob }}"></span></span></button>
+                <button type="button" onClick="{{ toggleFamily }}" style="{{ rowBtnStyle }}"><span style="flex: 1; text-align: left;">Family can add pages</span><span style="{{ swFamily }}"><span style="{{ swFamilyKnob }}"></span></span></button>
+                <button type="button" onClick="{{ toggleStamp }}" style="{{ rowBtnStyle }}"><span style="flex: 1; text-align: left;">Stamp photos with place and time</span><span style="{{ swStamp }}"><span style="{{ swStampKnob }}"></span></span></button>
+              </div>
+
+              <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 6px;">Data</div>
+              <div style="display: flex; flex-direction: column;">
+                <div style="{{ rowStyle }}"><span style="flex: 1;">Download everything</span><span style="{{ rowChevron }}">›</span></div>
+                <div style="{{ rowStyle }}"><span style="flex: 1;">Order a printed book</span><span style="{{ rowChevron }}">›</span></div>
+                <div style="{{ rowStyle }}"><span style="flex: 1;">Privacy policy</span><span style="{{ rowChevron }}">›</span></div>
+                <div style="{{ rowStyle }}"><span style="flex: 1; color: #5E1F35;">Delete my account</span><span style="{{ rowChevron }}">›</span></div>
+              </div>
+
+              <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; line-height: 1.7; color: rgba(30,28,23,0.45); margin-top: 20px;">Your photos stay yours. We never use them for anything but your book.</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ collectionOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; inset: 0; z-index: 90; background: #FFFFFF; display: flex; flex-direction: column; box-sizing: border-box;">
+            <div style="flex-shrink: 0; padding: 62px 24px 0; display: flex; align-items: center; justify-content: space-between;">
+              <button type="button" onClick="{{ closeCollection }}" style="width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(92,90,46,0.3); background: transparent; font-family: Georgia, serif; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">‹</button>
+              <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(30,28,23,0.55);">Mai Tran</div>
+              <div style="width: 38px;"></div>
+            </div>
+
+            <div style="flex-shrink: 0; padding: 22px 24px 12px;">
+              <div style="display: flex; align-items: flex-end; justify-content: space-between;">
+                <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.7px currentColor; font-size: 44px; line-height: 1; letter-spacing: 0.01em; color: #1E1C17;">Your world</div>
+                <div style="text-align: right;">
+                  <div style="font-family: 'Italiana', serif; font-size: 30px; line-height: 1; color: #5E1F35;">{{ ownedCount }}</div>
+                  <div style="font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 4px;">of 40 places</div>
+                </div>
+              </div>
+              <div style="height: 3px; border-radius: 3px; background: rgba(92,90,46,0.18); margin-top: 16px; overflow: hidden;">
+                <div style="{{ progressStyle }}"></div>
+              </div>
+            </div>
+
+            <div style="flex: 1; position: relative; margin: 6px 0 0; overflow: hidden;">
+              <iframe src="./world-map.html" style="position: absolute; inset: 0; width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+
+            <div style="flex-shrink: 0; padding: 10px 24px 34px; border-top: 1px solid rgba(92,90,46,0.18);">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; margin: 12px 0 12px;">
+                <span style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: #5C5A2E;">In your hands</span>
+                <span style="font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.1em; color: rgba(30,28,23,0.4);">tap one to open it</span>
+              </div>
+              <div style="display: flex; gap: 12px; overflow: auto; padding-bottom: 6px;">
+                <sc-for list="{{ owned }}" as="s" hint-placeholder-count="3">
+                  <button type="button" onClick="{{ s.onTap }}" style="{{ s.style }}">
+                    <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; border-radius: 10px; overflow: hidden; background: #F7F5EC;">
+                      <image-slot id="{{ s.slotId }}" shape="rect" placeholder="" style="position: absolute; inset: 0; width: 100%; height: 100%;"></image-slot>
+                      <div style="{{ s.badgeStyle }}">{{ s.kind }}</div>
+                    </div>
+                    <div style="font-family: 'Italiana', serif; font-size: 19px; letter-spacing: 0.01em; margin-top: 9px; text-align: left;">{{ s.city }}</div>
+                    <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 3px; text-align: left;">{{ s.country }}</div>
+                    <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; color: rgba(30,28,23,0.5); margin-top: 6px; text-align: left;">{{ s.pages }}</div>
+                  </button>
+                </sc-for>
+                <div style="flex: 0 0 132px; border: 1px dashed rgba(92,90,46,0.45); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                  <div style="font-family: 'Italiana', serif; font-size: 19px; letter-spacing: 0.01em; color: rgba(92,90,46,0.85);">Next one</div>
+                  <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; line-height: 1.6; color: rgba(30,28,23,0.45);">37 places still waiting for you</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div onClick="{{ closeSheet }}" style="position: absolute; inset: 0; background: rgba(30,28,23,0.5);"></div>
+            <div style="position: relative; background: #FFFFFF; border-radius: 24px 24px 0 0; padding: 14px 22px 30px; max-height: 82%; overflow: auto; box-shadow: 0 -20px 50px rgba(30,28,23,0.3);">
+              <div style="width: 40px; height: 4px; border-radius: 4px; background: rgba(30,28,23,0.18); margin: 0 auto 18px;"></div>
+              <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4px;">
+                <div style="font-family: 'Italiana', serif; -webkit-text-stroke: 0.5px currentColor; font-size: 32px; letter-spacing: 0.01em; color: #1E1C17;">{{ sheetTitle }}</div>
+                <button type="button" onClick="{{ sheetBack }}" style="background: transparent; border: none; font-family: 'Marcellus', serif; font-size: 13px; color: rgba(30,28,23,0.5); cursor: pointer; padding: 0 0 6px;">{{ sheetBackLabel }}</button>
+              </div>
+              <div style="font-family: 'Montserrat', sans-serif; font-size: 12px; line-height: 1.7; color: rgba(30,28,23,0.6); margin-bottom: 18px;">{{ sheetSub }}</div>
+              <sc-if value="{{ onGrid }}" hint-placeholder-val="{{ true }}">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 18px;">
+                    <div style="flex: 1; display: flex; align-items: center; gap: 7px;">
+                      <span style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(30,28,23,0.5);">Words</span>
+                      <span style="{{ tq0 }}"></span><span style="{{ tq1 }}"></span><span style="{{ tq2 }}"></span>
+                    </div>
+                    <div style="flex: 1.4; display: flex; align-items: center; gap: 7px;">
+                      <span style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(30,28,23,0.5);">Photos</span>
+                      <span style="{{ pq0 }}"></span><span style="{{ pq1 }}"></span><span style="{{ pq2 }}"></span><span style="{{ pq3 }}"></span><span style="{{ pq4 }}"></span>
+                    </div>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                    <sc-for list="{{ slots }}" as="slot" hint-placeholder-count="8">
+                      <button type="button" onClick="{{ slot.onTap }}" style="{{ slot.style }}">
+                        <div style="{{ slot.thumbStyle }}">
+                          <div style="{{ slot.e1 }}"></div>
+                          <div style="{{ slot.e2 }}"></div>
+                          <div style="{{ slot.e3 }}"></div>
+                          <div style="{{ slot.e4 }}"></div>
+                          <div style="{{ slot.numStyle }}">{{ slot.glyph }}</div>
+                        </div>
+                        <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.08em; color: rgba(30,28,23,0.5); margin-top: 6px; text-align: center;">{{ slot.label }}</div>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ hasPick }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                      <button type="button" onClick="{{ goLayouts }}" style="flex: 1; background: #5E1F35; color: #FFFFFF; border: none; border-radius: 12px; padding: 15px; font-family: 'Marcellus', serif; font-size: 14px; letter-spacing: 0.03em; cursor: pointer;">{{ primaryLabel }}</button>
+                      <sc-if value="{{ pickFilled }}" hint-placeholder-val="{{ false }}">
+                        <button type="button" onClick="{{ deletePage }}" style="width: 54px; border: 1px solid rgba(94,31,53,0.4); background: transparent; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#5E1F35" stroke-width="1.3" stroke-linecap="round"><path d="M5 7h14"></path><path d="M9 7V5h6v2"></path><path d="M7 7l1 12h8l1-12"></path></svg>
+                        </button>
+                      </sc-if>
+                    </div>
+                  </sc-if>
+                  <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; line-height: 1.7; color: rgba(30,28,23,0.45); margin-top: 14px; text-align: center;">{{ gridHint }}</div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ onLayouts }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <button type="button" onClick="{{ pickT0 }}" style="{{ tpl0 }}">
+                      <div style="position: relative; width: 100%; aspect-ratio: 3 / 4; background: #FFFFFF; border: 1px solid rgba(92,90,46,0.2); border-radius: 6px; overflow: hidden; margin-bottom: 10px;">
+                        <div style="position: absolute; inset: 12px 12px auto; height: 8px; background: rgba(30,28,23,0.7); width: 52%;"></div>
+                        <div style="position: absolute; left: 12px; right: 12px; top: 32px; display: flex; flex-direction: column; gap: 5px;">
+                          <span style="height: 3px; background: rgba(30,28,23,0.2); display: block;"></span><span style="height: 3px; background: rgba(30,28,23,0.2); display: block;"></span><span style="height: 3px; background: rgba(30,28,23,0.2); display: block; width: 70%;"></span>
+                        </div>
+                      </div>
+                      <div style="font-family: 'Italiana', serif; font-size: 19px; letter-spacing: 0.01em;">A letter</div>
+                      <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 3px;">words</div>
+                    </button>
+                    <button type="button" onClick="{{ pickT1 }}" style="{{ tpl1 }}">
+                      <div style="position: relative; width: 100%; aspect-ratio: 3 / 4; background: #5E1F35; border-radius: 6px; overflow: hidden; margin-bottom: 10px;">
+                        <div style="position: absolute; left: 14px; right: 14px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 6px;">
+                          <span style="height: 6px; background: rgba(240,234,216,0.85); display: block;"></span><span style="height: 6px; background: rgba(240,234,216,0.85); display: block; width: 80%;"></span><span style="height: 6px; background: rgba(240,234,216,0.5); display: block; width: 45%;"></span>
+                        </div>
+                      </div>
+                      <div style="font-family: 'Italiana', serif; font-size: 19px; letter-spacing: 0.01em;">A quote</div>
+                      <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 3px;">words</div>
+                    </button>
+                    <button type="button" onClick="{{ pickT2 }}" style="{{ tpl2 }}">
+                      <div style="position: relative; width: 100%; aspect-ratio: 3 / 4; background: #FFFFFF; border-radius: 6px; overflow: hidden; margin-bottom: 10px;">
+                        <div style="position: absolute; inset: 0; background: rgba(92,90,46,0.3);"></div>
+                        <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background: linear-gradient(to top, rgba(30,28,23,0.75), rgba(30,28,23,0));"></div>
+                        <div style="position: absolute; left: 12px; bottom: 12px; height: 6px; width: 55%; background: rgba(240,234,216,0.9);"></div>
+                      </div>
+                      <div style="font-family: 'Italiana', serif; font-size: 19px; letter-spacing: 0.01em;">Full bleed</div>
+                      <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 3px;">1 photo</div>
+                    </button>
+                    <button type="button" onClick="{{ pickT3 }}" style="{{ tpl3 }}">
+                      <div style="position: relative; width: 100%; aspect-ratio: 3 / 4; background: #FFFFFF; border: 1px solid rgba(92,90,46,0.2); border-radius: 6px; overflow: hidden; margin-bottom: 10px;">
+                        <div style="position: absolute; left: 12px; top: 14px; width: 58%; height: 42%; background: rgba(92,90,46,0.32);"></div>
+                        <div style="position: absolute; right: 12px; bottom: 14px; width: 54%; height: 38%; background: rgba(92,90,46,0.55); box-shadow: -5px -5px 0 #FFFFFF;"></div>
+                      </div>
+                      <div style="font-family: 'Italiana', serif; font-size: 19px; letter-spacing: 0.01em;">Offset pair</div>
+                      <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 3px;">2 photos</div>
+                    </button>
+                    <button type="button" onClick="{{ pickT4 }}" style="{{ tpl4 }}">
+                      <div style="position: relative; width: 100%; aspect-ratio: 3 / 4; background: #FFFFFF; border: 1px solid rgba(92,90,46,0.2); border-radius: 6px; overflow: hidden; margin-bottom: 10px;">
+                        <div style="position: absolute; inset: 12px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 5px;">
+                          <span style="background: rgba(92,90,46,0.3); display: block;"></span><span style="background: rgba(92,90,46,0.55); display: block;"></span><span style="background: rgba(92,90,46,0.55); display: block;"></span><span style="background: rgba(92,90,46,0.3); display: block;"></span>
+                        </div>
+                      </div>
+                      <div style="font-family: 'Italiana', serif; font-size: 19px; letter-spacing: 0.01em;">Contact sheet</div>
+                      <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 3px;">4 photos</div>
+                    </button>
+                    <button type="button" onClick="{{ pickT5 }}" style="{{ tpl5 }}">
+                      <div style="position: relative; width: 100%; aspect-ratio: 3 / 4; background: #FFFFFF; border: 1px solid rgba(92,90,46,0.2); border-radius: 6px; overflow: hidden; margin-bottom: 10px;">
+                        <div style="position: absolute; left: 12px; right: 12px; top: 16px; height: 46%; background: rgba(92,90,46,0.32);"></div>
+                        <div style="position: absolute; left: 12px; right: 12px; bottom: 22px; display: flex; flex-direction: column; gap: 4px;">
+                          <span style="height: 5px; background: rgba(30,28,23,0.65); display: block; width: 62%;"></span><span style="height: 3px; background: rgba(30,28,23,0.2); display: block;"></span>
+                        </div>
+                      </div>
+                      <div style="font-family: 'Italiana', serif; font-size: 19px; letter-spacing: 0.01em;">Photo · note</div>
+                      <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(30,28,23,0.45); margin-top: 3px;">1 photo</div>
+                    </button>
+                  </div>
+                  <button type="button" onClick="{{ confirmLayout }}" style="{{ confirmStyle }}">{{ confirmLabel }}</button>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </x-import>
+  </div>
+</section>
+
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1400,&quot;height&quot;:1100},&quot;placeName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;AMSTERDAM&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;tapCoach&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { screen: null, page: 0 };
+
+  renderVals() {
+    const start = this.props.tapCoach === false ? 'home' : 'tap';
+    const s = this.state.screen || start;
+    const p = this.state.page;
+    const go = (n) => () => this.setState({ screen: n });
+    const navWrap = (dark) => 'flex-shrink: 0; display: flex; align-items: stretch; justify-content: space-around; padding: 12px 16px 32px; border-top: 1px solid ' + (dark ? 'rgba(240,234,216,0.18)' : 'rgba(92,90,46,0.18)') + '; background: ' + (dark ? 'rgba(30,28,23,0.6)' : '#FFFFFF') + ';';
+    const navItem = (on, dark) => 'background: transparent; border: none; cursor: pointer; padding: 6px 10px; display: flex; flex-direction: column; align-items: center; gap: 5px;'
+      + " font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.14em;"
+      + ' color: ' + (on ? (dark ? '#F0EAD8' : '#5C5A2E') : (dark ? 'rgba(240,234,216,0.45)' : 'rgba(30,28,23,0.45)')) + ';';
+    const pageBtn = (side, shown) => 'position: absolute; top: 50%; transform: translateY(-50%); ' + side + ': -14px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(30,28,23,0.12); background: rgba(255,255,255,0.95); color: #1E1C17; font-family: Georgia, serif; font-size: 21px; line-height: 1; cursor: pointer; z-index: 20; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(30,28,23,0.14); transition: opacity 0.25s ease;'
+      + (shown ? ' opacity: 1;' : ' opacity: 0; pointer-events: none;');
+    const dotStyle = (on) => 'width: 7px; height: 7px; padding: 0; border-radius: 50%; cursor: pointer; border: 1px solid ' + (on ? '#5C5A2E' : 'rgba(30,28,23,0.28)') + '; background: ' + (on ? '#5C5A2E' : 'transparent') + ';';
+    return {
+      placeName: this.props.placeName ?? 'AMSTERDAM',
+      frameDark: s === 'tap' || s === 'home' || s === 'capture' || s === 'share',
+      isTap: s === 'tap', isHome: s === 'home', isLand: s === 'land', isBook: s === 'book',
+      isCapture: s === 'capture', isNote: s === 'note', isShare: s === 'share', isProfile: s === 'profile',
+      goHome: go('home'), goLand: go('land'), goBook: go('book'), goCapture: go('capture'),
+      goNote: go('note'), goShare: go('share'), goProfile: go('profile'),
+      isPageNote: p === 0, isPage2: p === 1, isPage3: p === 2, isPage4: p === 3,
+      pageLabel: '0' + (p + 1) + ' / 04',
+      prevPage: () => this.setState({ page: Math.max(0, this.state.page - 1) }),
+      nextPage: () => this.setState({ page: Math.min(3, this.state.page + 1) }),
+      goPage1: () => this.setState({ page: 0 }),
+      goPage2: () => this.setState({ page: 1 }),
+      goPage3: () => this.setState({ page: 2 }),
+      goPage4: () => this.setState({ page: 3 }),
+      pagePrevStyle: pageBtn('left', p > 0),
+      pageNextStyle: pageBtn('right', p < 3),
+      pd1: dotStyle(p === 0), pd2: dotStyle(p === 1), pd3: dotStyle(p === 2), pd4: dotStyle(p === 3),
+      navWrapDark: navWrap(true), navWrapLight: navWrap(false),
+      navLandDark: navItem(s === 'land', true), navBookDark: navItem(s === 'book', true), navYouDark: navItem(s === 'profile', true),
+      navLandLight: navItem(s === 'land', false), navBookLight: navItem(s === 'book', false), navYouLight: navItem(s === 'profile', false),
+      ...this.bookVals(),
+    };
+  }
+
+  bookVals() {
+    const N = 7;
+    const cur = this.state.bp || 0;
+    const t = this.state.bt || 0;
+    const dragging = !!this._dragging;
+    const out = {};
+    const names = ['pgc', 'pg0', 'pg1', 'pg2', 'pg3', 'pg4', 'pgb'];
+    const base = 'position: absolute; inset: 0; border-radius: 4px; overflow: hidden; background: #FFFFFF; transform-origin: left center; backface-visibility: hidden; box-shadow: 0 10px 26px rgba(30,28,23,0.14);';
+    for (let i = 0; i < N; i++) {
+      let deg = i < cur ? -178 : 0;
+      let z = i < cur ? i : N - i;
+      if (t > 0 && i === cur) { deg = -178 * t; z = N + 2; }
+      if (t < 0 && i === cur - 1) { deg = -178 * (1 + t); z = N + 2; }
+      out[names[i]] = base + ' transform: rotateY(' + deg.toFixed(1) + 'deg); z-index: ' + z + ';'
+        + (dragging ? '' : ' transition: transform 0.55s cubic-bezier(.22,.61,.36,1);');
+    }
+    const openAmt = Math.min(1, Math.max(0, cur > 0 ? 1 : Math.max(t, 0)));
+    out.spineStyle = 'position: absolute; top: 0; bottom: 0; left: 0; width: 26px; z-index: 30; pointer-events: none;'
+      + ' background: linear-gradient(to right, rgba(30,28,23,0.30) 0%, rgba(30,28,23,0.12) 42%, rgba(30,28,23,0) 100%);'
+      + ' opacity: ' + (cur >= N - 1 ? 0 : openAmt).toFixed(2) + '; transition: opacity 0.4s ease;';
+    out.bookHint = cur === 0 ? 'drag to open' : (cur >= N - 1 ? 'the end' : 'drag to turn');
+    const tq = (on) => 'display: block; height: 3px; flex: 1; border-radius: 3px; background: ' + (on ? 'rgba(30,28,23,0.15)' : '#5C5A2E') + ';';
+    const sel = this.state.tpl == null ? -1 : this.state.tpl;
+    // ── souvenir menu · claim · collection ───────────────────────
+    const claimed = this.state.claimed == null ? false : this.state.claimed;
+    const cstep = this.state.cstep || 0;
+    out.claimed = claimed;
+    out.unclaimed = !claimed;
+    out.ownerLine = claimed ? 'In your account · Mai Tran' : 'Not in any account yet';
+    out.claimLabel = claimed ? 'Move to another account' : 'Add to my account';
+    out.ownedCount = claimed ? 3 : 2;
+    out.progressStyle = 'height: 100%; border-radius: 3px; background: #5E1F35; width: ' + ((claimed ? 3 : 2) / 40 * 100).toFixed(1) + '%;';
+    const mItem = (kind) => 'width: 100%; box-sizing: border-box; background: transparent; border: none; border-bottom: 1px solid rgba(92,90,46,0.16); padding: 17px 0; cursor: pointer; display: flex; align-items: center; gap: 14px;'
+      + " font-family: 'Marcellus', serif; font-size: 15px; letter-spacing: 0.02em;"
+      + (kind === 'primary' ? ' color: #5E1F35;' : kind === 'danger' ? ' color: #5E1F35; border-bottom: none;' : ' color: #1E1C17;');
+    out.menuPrimary = mItem('primary');
+    out.menuItem = mItem();
+    out.menuDanger = mItem('danger');
+    out.menuOpen = !!this.state.menuOpen;
+    out.openMenu = () => this.setState({ menuOpen: true });
+    out.closeMenu = () => this.setState({ menuOpen: false });
+    out.releaseSouvenir = () => this.setState({ claimed: false, menuOpen: false });
+    out.claimOpen = !!this.state.claimOpen;
+    out.claimStep0 = cstep === 0;
+    out.claimStep1 = cstep === 1;
+    out.claimStep2 = cstep === 2;
+    const cs = (on) => 'display: block; height: 3px; border-radius: 3px; transition: width 0.3s ease; width: ' + (on ? '20px' : '9px') + '; background: ' + (on ? '#5C5A2E' : 'rgba(30,28,23,0.2)') + ';';
+    out.cs0 = cs(cstep === 0); out.cs1 = cs(cstep === 1); out.cs2 = cs(cstep === 2);
+    out.startClaim = () => this.setState({ menuOpen: false, claimOpen: true, cstep: 0 });
+    out.claimNext = () => this.setState({ cstep: Math.min(2, cstep + 1), claimed: cstep + 1 >= 2 ? true : claimed });
+    out.claimBack = () => (cstep === 0 ? this.setState({ claimOpen: false }) : this.setState({ cstep: cstep - 1 }));
+    out.closeClaim = () => this.setState({ claimOpen: false });
+    out.finishClaim = () => this.setState({ claimOpen: false, collectionOpen: true });
+    // inline rename on the hero title
+    const renaming = !!this.state.renaming;
+    out.renaming = renaming;
+    out.souvenirName = this.state.souvenirName || this.props.placeName || 'AMSTERDAM';
+    out.titleStyle = "font-family: 'Italiana', serif; -webkit-text-stroke: 0.8px currentColor; font-size: 54px; line-height: 0.98; letter-spacing: 0.01em; outline: none;"
+      + (renaming ? ' border-bottom: 1px solid rgba(240,234,216,0.7); padding-bottom: 2px; cursor: text;' : '');
+    out.penStyle = 'width: 30px; height: 30px; border-radius: 50%; background: rgba(30,28,23,0.35); border: 1px solid rgba(240,234,216,0.35); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.25s ease;'
+      + (renaming ? ' opacity: 0; pointer-events: none;' : ' opacity: 0.85;');
+    out.startRename = (e) => {
+      this.setState({ renaming: true });
+      const el = e.currentTarget.parentNode.firstElementChild;
+      setTimeout(() => { if (el && el.focus) { el.focus(); document.execCommand && document.getSelection().selectAllChildren(el); } }, 30);
+    };
+    out.stopRename = (e) => {
+      const v = (e.currentTarget.textContent || '').trim();
+      this.setState({ renaming: false, souvenirName: v || (this.props.placeName || 'AMSTERDAM') });
+    };
+    out.renameKey = (e) => { if (e.key === 'Enter') { e.preventDefault(); e.currentTarget.blur(); } };
+
+    // profile + settings
+    out.profileOpen = !!this.state.profileOpen;
+    out.openProfile = () => this.setState({ profileOpen: true, accountOpen: false });
+    out.closeProfile = () => this.setState({ profileOpen: false });
+    out.settingsOpen = !!this.state.settingsOpen;
+    out.openSettings = () => this.setState({ settingsOpen: true, accountOpen: false });
+    out.closeSettings = () => this.setState({ settingsOpen: false });
+    out.rowStyle = 'display: flex; align-items: center; gap: 12px; padding: 17px 0; border-bottom: 1px solid rgba(92,90,46,0.16);'
+      + " font-family: 'Marcellus', serif; font-size: 15px; color: #1E1C17;";
+    out.rowBtnStyle = 'width: 100%; box-sizing: border-box; background: transparent; border: none; border-bottom: 1px solid rgba(92,90,46,0.16); padding: 15px 0; cursor: pointer; display: flex; align-items: center; gap: 12px;'
+      + " font-family: 'Marcellus', serif; font-size: 15px; color: #1E1C17;";
+    out.rowValStyle = "font-family: 'Montserrat', sans-serif; font-size: 12px; color: rgba(30,28,23,0.5);";
+    out.rowChevron = 'font-family: Georgia, serif; font-size: 18px; color: rgba(30,28,23,0.35);';
+    const vis = this.state.vis || 'anyone';
+    const visBtn = (on) => 'width: 100%; box-sizing: border-box; background: transparent; border: none; border-bottom: 1px solid rgba(92,90,46,0.16); padding: 16px 0; cursor: pointer; display: flex; align-items: flex-start; gap: 14px;'
+      + (on ? ' color: #1E1C17;' : ' color: #1E1C17;');
+    const visDot = (on) => 'width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; display: block; box-sizing: border-box; border: 1px solid ' + (on ? '#5E1F35' : 'rgba(92,90,46,0.45)') + ';'
+      + (on ? ' box-shadow: inset 0 0 0 3.5px #FFFFFF, inset 0 0 0 12px #5E1F35;' : '');
+    out.visAnyoneStyle = visBtn(vis === 'anyone'); out.visPeopleStyle = visBtn(vis === 'people'); out.visOnlyStyle = visBtn(vis === 'only');
+    out.visDotAnyone = visDot(vis === 'anyone'); out.visDotPeople = visDot(vis === 'people'); out.visDotOnly = visDot(vis === 'only');
+    out.setVisAnyone = () => this.setState({ vis: 'anyone' });
+    out.setVisPeople = () => this.setState({ vis: 'people' });
+    out.setVisOnly = () => this.setState({ vis: 'only' });
+    const sw = (on) => 'width: 44px; height: 25px; border-radius: 999px; position: relative; display: block; flex-shrink: 0; transition: background 0.25s ease; background: ' + (on ? '#5C5A2E' : 'rgba(30,28,23,0.18)') + ';';
+    const knob = (on) => 'position: absolute; top: 3px; ' + (on ? 'left: 22px;' : 'left: 3px;') + ' width: 19px; height: 19px; border-radius: 50%; background: #FFFFFF; display: block; transition: left 0.25s ease; box-shadow: 0 1px 3px rgba(30,28,23,0.25);';
+    const tg = (key, def) => (this.state[key] == null ? def : this.state[key]);
+    const L = tg('tgLetter', true), Fa = tg('tgFamily', true), St = tg('tgStamp', true);
+    out.swLetter = sw(L); out.swLetterKnob = knob(L); out.toggleLetter = () => this.setState({ tgLetter: !L });
+    out.swFamily = sw(Fa); out.swFamilyKnob = knob(Fa); out.toggleFamily = () => this.setState({ tgFamily: !Fa });
+    out.swStamp = sw(St); out.swStampKnob = knob(St); out.toggleStamp = () => this.setState({ tgStamp: !St });
+
+    out.accountOpen = !!this.state.accountOpen;
+    out.openAccount = () => this.setState({ accountOpen: true });
+    out.closeAccount = () => this.setState({ accountOpen: false });
+    const list = [
+      { city: 'Amsterdam', country: 'Netherlands', kind: 'Magnet', pages: '4 of 8 pages', slotId: 'ow-col-ams' },
+      { city: 'Hạ Long', country: 'Vietnam', kind: 'Keychain', pages: 'no pages yet', slotId: 'ow-col-hal' },
+      { city: 'Lisbon', country: 'Portugal', kind: 'Magnet', pages: '2 of 8 pages', slotId: 'ow-col-lis' },
+    ];
+    out.owned = list.slice(0, claimed ? 3 : 2).map((s) => ({
+      city: s.city, country: s.country, kind: s.kind, pages: s.pages, slotId: s.slotId,
+      style: 'flex: 0 0 132px; padding: 0; background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column;',
+      badgeStyle: 'position: absolute; left: 7px; bottom: 7px; background: rgba(30,28,23,0.7); color: #F0EAD8; border-radius: 999px; padding: 4px 9px;'
+        + " font-family: 'Marcellus', serif; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase;",
+      onTap: () => this.setState({ collectionOpen: false, accountOpen: false, menuOpen: false }),
+    }));
+    out.collectionOpen = !!this.state.collectionOpen;
+    out.openCollection = () => this.setState({ collectionOpen: true, menuOpen: false, accountOpen: false, profileOpen: false, settingsOpen: false });
+    out.closeCollection = () => this.setState({ collectionOpen: false });
+
+    out.sheetOpen = !!this.state.sheetOpen;
+    out.openSheet = () => this.setState({ sheetOpen: true, step: 'grid', pick: null, tpl: null });
+    out.closeSheet = () => this.setState({ sheetOpen: false });
+
+    // ── book editor ──────────────────────────────────────────────
+    const pages = this.state.pages || [
+      { kind: 'words', name: 'A letter' },
+      { kind: 'photo', name: 'Full bleed' },
+      { kind: 'photo', name: 'Offset pair' },
+      { kind: 'words', name: 'A quote' },
+    ];
+    const step = this.state.step || 'grid';
+    const pick = this.state.pick == null ? null : this.state.pick;
+    const usedText = pages.filter((p) => p.kind === 'words').length;
+    const usedPhoto = pages.filter((p) => p.kind === 'photo').length;
+    out.textLeft = Math.max(0, 3 - usedText);
+    out.photoLeft = Math.max(0, 5 - usedPhoto);
+    const replacing = pick != null && pick < pages.length;
+    const kindLeft = (k) => {
+      const used = k === 'words' ? usedText : usedPhoto;
+      const cap = k === 'words' ? 3 : 5;
+      const back = replacing && pages[pick].kind === k ? 1 : 0;
+      return cap - used + back;
+    };
+    const full = !replacing && pages.length >= 8;
+    for (let i = 0; i < 3; i++) out['tq' + i] = tq(i >= usedText);
+    for (let i = 0; i < 5; i++) out['pq' + i] = tq(i >= usedPhoto);
+
+    out.onGrid = step === 'grid';
+    out.onLayouts = step === 'layouts';
+    out.sheetTitle = step === 'grid' ? 'Edit your book' : (pick != null && pick < pages.length ? 'Change layout' : 'New page');
+    out.sheetBackLabel = step === 'grid' ? 'Done' : '‹ Back';
+    out.sheetBack = () => (step === 'grid' ? this.setState({ sheetOpen: false }) : this.setState({ step: 'grid', tpl: null }));
+    out.sheetSub = step === 'grid'
+      ? 'Tap a page to change or remove it. Tap a blank one to add.'
+      : 'Your words and photos move into the layout you pick.';
+    out.gridHint = pages.length >= 8 ? 'All 8 pages used. Remove one to add another.' : 'Every souvenir comes with 8 pages: 3 words, 5 photos.';
+
+    const slotBase = 'position: relative; padding: 0; background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: stretch;';
+    const OL = 'rgba(92,90,46,0.45)', OL2 = 'rgba(92,90,46,0.28)', INK = 'rgba(30,28,23,0.55)', INK2 = 'rgba(30,28,23,0.2)';
+    const box = (css) => 'position: absolute; ' + css;
+    const none = 'display: none;';
+    const mini = {
+      'A letter':      [box('left:14%; top:14%; width:52%; height:7%; background:' + INK + ';'), box('left:14%; top:30%; right:14%; height:4%; background:' + INK2 + ';'), box('left:14%; top:40%; right:14%; height:4%; background:' + INK2 + ';'), box('left:14%; top:50%; width:44%; height:4%; background:' + INK2 + ';')],
+      'A quote':       [box('inset:0; background:#5E1F35;'), box('left:16%; top:40%; right:16%; height:7%; background:rgba(240,234,216,0.9);'), box('left:16%; top:53%; width:52%; height:7%; background:rgba(240,234,216,0.9);'), none],
+      'Full bleed':    [box('inset:0; background:' + OL + ';'), box('left:0; right:0; bottom:0; height:34%; background:linear-gradient(to top, rgba(30,28,23,0.7), rgba(30,28,23,0));'), box('left:12%; bottom:12%; width:56%; height:6%; background:rgba(240,234,216,0.9);'), none],
+      'Offset pair':   [box('left:10%; top:12%; width:58%; height:42%; background:' + OL2 + ';'), box('right:10%; bottom:12%; width:54%; height:38%; background:' + OL + '; box-shadow:-4px -4px 0 #FFFFFF;'), none, none],
+      'Contact sheet': [box('left:12%; top:12%; width:36%; height:36%; background:' + OL2 + ';'), box('right:12%; top:12%; width:36%; height:36%; background:' + OL + ';'), box('left:12%; bottom:12%; width:36%; height:36%; background:' + OL + ';'), box('right:12%; bottom:12%; width:36%; height:36%; background:' + OL2 + ';')],
+      'Photo · note':  [box('left:12%; right:12%; top:12%; height:48%; background:' + OL2 + ';'), box('left:12%; top:68%; width:58%; height:6%; background:' + INK + ';'), box('left:12%; right:12%; top:80%; height:4%; background:' + INK2 + ';'), none],
+    };
+    out.slots = [];
+    for (let i = 0; i < 8; i++) {
+      const p = pages[i];
+      const on = pick === i;
+      const art = p ? (mini[p.name] || [none, none, none, none]) : [none, none, none, none];
+      out.slots.push({
+        style: slotBase,
+        thumbStyle: 'position: relative; width: 100%; aspect-ratio: 3 / 4; border-radius: 7px; overflow: hidden; background: #FFFFFF;'
+          + (p ? ' border: 1px solid rgba(92,90,46,0.3);' : ' border: 1px dashed rgba(92,90,46,0.5);')
+          + (on ? ' box-shadow: 0 0 0 2px #5C5A2E, 0 0 0 5px rgba(92,90,46,0.16);' : ''),
+        e1: art[0], e2: art[1], e3: art[2], e4: art[3],
+        numStyle: 'position: absolute; left: 4px; bottom: 4px; min-width: 15px; height: 15px; border-radius: 4px; display: flex; align-items: center; justify-content: center;'
+          + " font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.04em;"
+          + (p
+              ? ' background: ' + (p.kind === 'words' ? '#5E1F35' : '#5C5A2E') + '; color: #F0EAD8;'
+              : ' left: 0; right: 0; top: 0; bottom: 0; border-radius: 0; background: transparent; color: rgba(92,90,46,0.7); font-size: 18px;'),
+        glyph: p ? String(i + 1) : '+',
+        label: p ? p.name : 'blank',
+        onTap: () => this.setState({ pick: i, tpl: null }),
+      });
+    }
+    out.hasPick = pick != null;
+    out.pickFilled = pick != null && pick < pages.length;
+    out.primaryLabel = replacing ? 'Change this page' : (full ? 'All 8 pages used' : 'Choose a layout');
+    out.goLayouts = () => { if (!full || replacing) this.setState({ step: 'layouts' }); };
+    out.deletePage = () => this.setState({ pages: pages.filter((_, i) => i !== pick), pick: null });
+    const defs = [
+      { kind: 'words', name: 'A letter' }, { kind: 'words', name: 'A quote' },
+      { kind: 'photo', name: 'Full bleed' }, { kind: 'photo', name: 'Offset pair' },
+      { kind: 'photo', name: 'Contact sheet' }, { kind: 'photo', name: 'Photo · note' },
+    ];
+    const tplBase = 'text-align: left; padding: 10px; border-radius: 14px; background: #FFFFFF; color: #1E1C17;';
+    let selOk = sel >= 0;
+    for (let i = 0; i < 6; i++) {
+      const avail = kindLeft(defs[i].kind) > 0 && !full;
+      if (sel === i && !avail) selOk = false;
+      out['tpl' + i] = tplBase + ' border: 1px solid ' + (sel === i && avail ? '#5C5A2E' : 'rgba(92,90,46,0.22)') + ';'
+        + (sel === i && avail ? ' box-shadow: 0 0 0 2px rgba(92,90,46,0.25);' : '')
+        + (avail ? ' cursor: pointer; opacity: 1;' : ' cursor: default; opacity: 0.35;');
+      out['pickT' + i] = avail ? () => this.setState({ tpl: i }) : () => {};
+    }
+    out.confirmLabel = !selOk
+      ? (full ? 'All 8 pages used' : 'Pick one above')
+      : (replacing ? 'Replace this page' : 'Add this page');
+    out.confirmStyle = 'width: 100%; margin-top: 22px; border: none; border-radius: 14px; padding: 17px;'
+      + " font-family: 'Marcellus', serif; font-size: 15px; letter-spacing: 0.04em;"
+      + (!selOk
+          ? ' background: rgba(92,90,46,0.15); color: rgba(30,28,23,0.45); cursor: default;'
+          : ' background: #5E1F35; color: #FFFFFF; cursor: pointer;');
+    out.confirmLayout = () => {
+      if (!selOk) return;
+      const next = pages.slice();
+      if (pick != null && pick < next.length) next[pick] = defs[sel];
+      else next.push(defs[sel]);
+      this.setState({ pages: next, step: 'grid', pick: null, tpl: null });
+    };
+    const arrow = (side, shown) => 'position: absolute; top: 50%; transform: translateY(-50%); ' + side + ': -15px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(30,28,23,0.1); background: #FFFFFF; color: #1E1C17; font-family: Georgia, serif; font-size: 21px; line-height: 1; cursor: pointer; z-index: 40; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 16px rgba(30,28,23,0.16); transition: opacity 0.25s ease;'
+      + (shown ? ' opacity: 1;' : ' opacity: 0; pointer-events: none;');
+    const dash = (on) => 'display: block; height: 3px; border-radius: 4px; transition: width 0.35s ease, background 0.35s ease; width: ' + (on ? '22px' : '10px') + '; background: ' + (on ? '#5C5A2E' : 'rgba(30,28,23,0.22)') + ';';
+    out.bookLabel = cur === 0 ? 'COVER' : (cur >= N - 1 ? 'BACK' : '0' + cur + ' / 05');
+    out.bookPrev = () => this.setState({ bp: Math.max(0, cur - 1), bt: 0 });
+    out.bookNext = () => this.setState({ bp: Math.min(N - 1, cur + 1), bt: 0 });
+    out.bookPrevStyle = arrow('left', cur > 0);
+    out.bookNextStyle = arrow('right', cur < N - 1);
+    for (let i = 0; i < N; i++) out['bd' + i] = dash(i === cur);
+    out.noDrag = () => {};
+    out.bookDown = (e) => {
+      if (e.target && e.target.closest && e.target.closest('image-slot')) return;
+      this._dragging = true;
+      this._x0 = e.clientX;
+      this._w = e.currentTarget.offsetWidth || 320;
+      if (e.currentTarget.setPointerCapture) { try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {} }
+    };
+    out.bookMove = (e) => {
+      if (!this._dragging) return;
+      let v = -(e.clientX - this._x0) / this._w;
+      if (cur >= N - 1 && v > 0) v = 0;
+      if (cur <= 0 && v < 0) v = 0;
+      v = Math.round(Math.max(-1, Math.min(1, v)) * 100) / 100;
+      if (v === (this.state.bt || 0)) return;
+      this.setState({ bt: v });
+    };
+    out.bookUp = () => {
+      if (!this._dragging) return;
+      this._dragging = false;
+      const v = this.state.bt || 0;
+      if (v > 0.28) this.setState({ bp: Math.min(N - 1, cur + 1), bt: 0 });
+      else if (v < -0.28) this.setState({ bp: Math.max(0, cur - 1), bt: 0 });
+      else this.setState({ bt: 0 });
+    };
+    return out;
+  }
+}
+</script>
+</body>
+</html>

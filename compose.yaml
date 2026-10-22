@@ -1,0 +1,213 @@
+name: tappy
+
+services:
+  gateway:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    ports:
+      - "5302:8080"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      frontend:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    networks:
+      - ingress
+      - edge
+      - app
+    read_only: true
+    tmpfs:
+      - /config:mode=0700,size=16m
+      - /data:mode=0700,size=16m
+      - /tmp:mode=1777,size=16m
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    init: true
+    expose:
+      - "3000"
+    networks:
+      - edge
+    read_only: true
+    tmpfs:
+      - /tmp:mode=1777,size=32m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: [ "CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  redis:
+    image: redis:7.4-alpine
+    user: "0:0"
+    restart: unless-stopped
+    command:
+      - sh
+      - -c
+      - chown -R redis:redis /data && exec redis-server --appendonly yes --appendfsync everysec --requirepass "$$(cat /run/secrets/redis_password)"
+    secrets:
+      - redis_password
+    volumes:
+      - redis-data:/data
+    networks:
+      - queue
+    read_only: true
+    tmpfs:
+      - /tmp:mode=1777,size=16m
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli --no-auth-warning -a \"$$(cat /run/secrets/redis_password)\" ping | grep -q PONG" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  api:
+    build:
+      context: ./api-nestjs
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    init: true
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      SERVICE_ROLE: api
+      PUBLIC_SITE_URL: https://olive-wine.cherry.id.vn
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD_FILE: /run/secrets/redis_password
+    secrets:
+      - redis_password
+    depends_on:
+      redis:
+        condition: service_healthy
+    expose:
+      - "3000"
+    networks:
+      - app
+      - queue
+    read_only: true
+    tmpfs:
+      - /tmp:mode=1777,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: [ "CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  worker:
+    build:
+      context: ./api-nestjs
+      dockerfile: Dockerfile
+    command: [ "node", "dist/worker" ]
+    restart: unless-stopped
+    init: true
+    environment:
+      NODE_ENV: production
+      SERVICE_ROLE: worker
+      PUBLIC_SITE_URL: https://olive-wine.cherry.id.vn
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD_FILE: /run/secrets/redis_password
+      GMAIL_FILE: /run/secrets/gmail
+      GMAIL_PASSWORD_FILE: /run/secrets/gmail_password
+      NOTIFY_EMAIL_FILE: /run/secrets/notify_email
+    secrets:
+      - redis_password
+      - gmail
+      - gmail_password
+      - notify_email
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - queue
+      - egress
+    read_only: true
+    tmpfs:
+      - /tmp:mode=1777,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+networks:
+  ingress:
+  edge:
+    internal: true
+  app:
+    internal: true
+  queue:
+    internal: true
+  egress:
+
+volumes:
+  redis-data:
+
+secrets:
+  redis_password:
+    file: ./secrets/redis_password.txt
+  gmail:
+    file: ./secrets/gmail.txt
+  gmail_password:
+    file: ./secrets/gmail_password.txt
+  notify_email:
+    file: ./secrets/notify_email.txt

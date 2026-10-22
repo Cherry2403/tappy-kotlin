@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Olive-Wine — Layout Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #FFFFFF; color: #1E1C17; font-family: 'Montserrat', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  .phone { width: 300px; height: 650px; background: #1E1C17; border-radius: 42px; padding: 10px; position: relative; flex-shrink: 0; }
+  .screen { width: 100%; height: 100%; background: #FFFFFF; border-radius: 34px; overflow: hidden; position: relative; }
+  .notch { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 90px; height: 26px; background: #1E1C17; border-radius: 16px; z-index: 20; }
+  .status { position: absolute; top: 0; left: 0; right: 0; height: 42px; display: flex; justify-content: space-between; align-items: center; padding: 15px 24px 0; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600; color: #1E1C17; z-index: 15; }
+  .status.dark { color: #F0EAD8; }
+
+  /* Snappy, short. Not floaty ease-out-quint. */
+  @keyframes tapPulse {
+    0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+    18% { opacity: 0.75; }
+    55% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+    100% { opacity: 0; }
+  }
+  @keyframes tapDot {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+  @keyframes cardSnap {
+    0%, 100% { transform: rotate(4deg) translateY(0); }
+    45% { transform: rotate(4deg) translateY(0); }
+    50% { transform: rotate(3deg) translateY(2px); }
+    55% { transform: rotate(4deg) translateY(0); }
+  }
+  @keyframes profileFlip {
+    0%, 30% { opacity: 0; transform: rotateY(-14deg); }
+    40%, 90% { opacity: 1; transform: rotateY(0); }
+    100% { opacity: 0; transform: rotateY(0); }
+  }
+  @keyframes personDrop {
+    0% { opacity: 0; transform: translateY(-6px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes cardHandover {
+    0%, 15% { transform: translateX(-60px); }
+    40%, 60% { transform: translateX(0); }
+    85%, 100% { transform: translateX(60px); opacity: 1; }
+  }
+  @keyframes lineDraw {
+    0% { stroke-dashoffset: 200; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  /* ---------- Hero scroll sequence (ported from Hero.tsx + HeroVideoSequence.tsx) ---------- */
+  .hero-wrapper { position: relative; height: 500vh; }
+  .hero-sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    transition: background-color 1s ease-out;
+    display: block;
+  }
+  @media (min-width: 1024px) {
+    .hero-sticky { display: grid; grid-template-columns: 1.2fr 0.65fr auto; align-items: stretch; }
+  }
+  .hero-headline-col { display: none; flex-direction: column; justify-content: center; padding: 96px 24px 96px max(3rem, calc((100vw - 90rem) / 2 + 4rem)); }
+  @media (min-width: 1024px) { .hero-headline-col { display: flex; } }
+  .hero-headline-col h1 {
+    font-family: 'Marcellus', serif; font-weight: 400; font-size: 68px; line-height: 0.98; letter-spacing: -0.035em; margin: 0 0 48px; color: #F0EAD8;
+  }
+  .hero-headline-col h1 em { font-style: italic; font-weight: 300; color: #521d1d; }
+  .hero-headline-col a {
+    display: inline-flex; align-items: center; gap: 14px; border-radius: 10px; background: #F0EAD8; color: #1E1C17; padding: 18px 32px; font-family: 'Marcellus', serif; font-size: 16px; text-decoration: none;
+  }
+
+  .hero-caption-col { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 16px; }
+  @media (min-width: 1024px) { .hero-caption-col { display: flex; } }
+  .hero-caption-col .rule { width: 40px; height: 1px; margin: 0 auto; background: #521d1d; opacity: 0.7; }
+  .hero-caption-col .line { font-family: 'Marcellus', serif; font-size: 22px; letter-spacing: 0.12em; margin: 28px 0; color: #F0EAD8; }
+
+  .hero-media-col { height: 100%; }
+  @media (min-width: 1024px) { .hero-media-col { width: min(56.25svh, 40vw); justify-self: end; } }
+  .hero-media { position: relative; height: 100%; width: 100%; overflow: hidden; background: #1E1C17; }
+  .hero-scene {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transform: scale(1.05);
+    opacity: 0;
+    font-family: 'Marcellus', serif; font-size: 14px; color: rgba(240,234,216,0.35);
+  }
+  .hero-scene.active { opacity: 1; transform: scale(1); }
+  .hero-scrim { position: absolute; inset: 0; background: rgba(30,28,23,0.3); pointer-events: none; }
+  @media (min-width: 1024px) { .hero-scrim { background: rgba(30,28,23,0.1); } }
+  .hero-mobile-caption {
+    position: absolute; top: 18%; left: 0; right: 0; text-align: center; padding: 0 32px;
+    font-family: 'Marcellus', serif; font-size: 24px; line-height: 1.25; letter-spacing: 0.1em; color: #F0EAD8;
+  }
+  @media (min-width: 1024px) { .hero-mobile-caption { display: none; } }
+  .hero-progress { position: absolute; top: 24px; left: 32px; right: 32px; display: flex; gap: 6px; }
+  .hero-progress span { flex: 1; height: 3px; border-radius: 4px; background: rgba(240,234,216,0.25); overflow: hidden; }
+  .hero-progress span i { display: block; height: 100%; width: 0%; background: rgba(240,234,216,0.9); }
+  .hero-scroll-hint { position: absolute; bottom: 28px; left: 0; right: 0; display: flex; justify-content: center; transition: opacity 0.5s; }
+
+  .hero-below {
+    padding: 56px 24px 16px;
+  }
+  @media (min-width: 1024px) { .hero-below { display: none; } }
+  .hero-below h1 { font-family: 'Marcellus', serif; font-weight: 400; font-size: 38px; line-height: 1; letter-spacing: -0.03em; color: #3E3D31; margin: 0 0 32px; }
+  .hero-below h1 em { font-style: italic; font-weight: 300; color: #5E1F35; }
+  .hero-below a { display: inline-flex; align-items: center; gap: 14px; border-radius: 10px; background: #5C5A2E; color: #FFFFFF; padding: 16px 32px; font-family: 'Marcellus', serif; font-size: 16px; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- NAV -->
+  <div style="max-width: 1440px; margin: 0 auto;">
+  <nav style="display: flex; justify-content: space-between; align-items: center; padding: 26px 56px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="font-family: 'Marcellus', serif; font-weight: 500; font-size: 22px; letter-spacing: -0.02em; color: #5C5A2E">Olive-Wine</span>
+    </div>
+    <div style="display: flex; gap: 44px; font-family: 'Marcellus', serif; font-size: 15px; color: #1E1C17;">
+      <a href="#object" style="color: inherit; text-decoration: none;">The card</a>
+      <a href="#dashboard" style="color: inherit; text-decoration: none;">The dashboard</a>
+      <a href="#reserve" style="color: inherit; text-decoration: none; font-style: italic; color: #5E1F35;">Reserve</a>
+    </div>
+  </nav>
+  </div>
+
+  <!-- 1. HERO — full-width background, scroll-driven sequence (ported from Hero.tsx / HeroVideoSequence.tsx; video swapped for placeholder scenes) -->
+  <section class="hero-wrapper" id="hero-wrapper">
+    <div class="hero-sticky" id="hero-sticky">
+
+      <div class="hero-headline-col">
+        <h1>Stop meeting people<br>just to forget,<br><em>and be forgotten.</em></h1>
+        <div><a href="#reserve">Reserve a card</a></div>
+      </div>
+
+      <div class="hero-caption-col">
+        <div class="rule"></div>
+        <div class="line" id="hero-caption-desktop">YOU MEET</div>
+        <div class="rule"></div>
+      </div>
+
+      <div class="hero-media-col">
+        <div class="hero-media">
+          <div class="hero-scene active" data-scene="0" style="background:#1e1c17;">YOU MEET — scene 1 placeholder</div>
+          <div class="hero-scene" data-scene="1" style="background:#3e3d31;">ONE TAP — scene 2 placeholder</div>
+          <div class="hero-scene" data-scene="2" style="background:#5c5a2e;">CONNECT BOTH WAYS — scene 3 placeholder</div>
+          <div class="hero-scene" data-scene="3" style="background:#6a6836;">MEET MANY — scene 4 placeholder</div>
+          <div class="hero-scene" data-scene="4" style="background:#72364b;">WHO, WHERE, WHY — NEVER LOST — scene 5 placeholder</div>
+
+          <div class="hero-scrim"></div>
+
+          <div class="hero-mobile-caption" id="hero-caption-mobile">YOU MEET</div>
+
+          <div class="hero-progress" id="hero-progress">
+            <span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span>
+          </div>
+
+          <div class="hero-scroll-hint" id="hero-scroll-hint">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f0ead8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 4v14"></path>
+              <path d="m6 13 6 6 6-6"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- mobile-only headline, right after the pinned hero -->
+  <div class="hero-below">
+    <h1>Stop meeting people<br>just to forget,<br><em>and be forgotten.</em></h1>
+    <a href="#reserve">Reserve a card</a>
+  </div>
+
+  <div style="max-width: 1440px; margin: 0 auto;">
+
+  <!-- Section divider -->
+  <div style="display: flex; align-items: center; gap: 20px; padding: 80px 56px 0;">
+    <div style="flex: 1; height: 1px; background: rgba(92,90,46,0.18);"></div>
+    <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 22px; color: #5E1F35;">§</div>
+    <div style="flex: 1; height: 1px; background: rgba(92,90,46,0.18);"></div>
+  </div>
+
+  <!-- 2. USE CASES -->
+  <section style="padding: 80px 56px 120px;">
+
+    <h2 style="font-family: 'Marcellus', serif; font-weight: 400; font-size: 56px; line-height: 1; letter-spacing: -0.025em; margin: 0 0 56px;">
+      Give it away. <em style="font-style: italic; color: rgb(94, 31, 53);">Or keep it.</em>
+    </h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+
+      <!-- The meeting that matters -->
+      <div style="border: 1px solid rgba(92,90,46,0.2); border-radius: 14px; padding: 44px; background-color: #5E1F35">
+        <h3 style="font-family: 'Marcellus', serif; font-weight: 400; font-size: 42px; line-height: 1; letter-spacing: -0.025em; margin: 0 0 36px; color: #FFFFFF">
+          For the meeting<br>that <em style="font-style: italic; color: #EDEA9A">matters.</em>
+        </h3>
+
+        <!-- Give the card: person A hands it, person B scans and keeps it -->
+        <div style="aspect-ratio: 1.6 / 1; border: 1px solid rgba(92,90,46,0.15); border-radius: 10px; background: #FFFFFF; padding: 32px 40px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden;">
+          <!-- Giver -->
+          <svg viewBox="0 0 60 100" style="height: 74%;">
+            <circle cx="30" cy="18" r="11" fill="#1E1C17"></circle>
+            <path d="M 10 100 L 10 48 Q 10 30 30 30 Q 50 30 50 48 L 50 100 Z" fill="#1E1C17"></path>
+          </svg>
+          <!-- Card travelling from giver to receiver -->
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <div style="width: 68px; height: 42px; background: #1E1C17; border-radius: 5px; border: 1px solid #5C5A2E; animation: cardHandover 3.2s ease-in-out infinite; position: relative;">
+              <div style="position: absolute; top: 50%; left: 50%; width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #5E1F35; transform: translate(-50%, -50%); animation: tapPulse 3.2s linear infinite; animation-delay: 1.6s;"></div>
+            </div>
+            <div style="font-family: 'Marcellus', serif; font-style: italic; font-size: 12px; color: #5C5A2E;">given, then scanned</div>
+          </div>
+          <!-- Receiver holding phone -->
+          <div style="display: flex; align-items: center; gap: 8px; height: 74%;">
+            <div style="width: 26px; height: 46px; background: #FFFFFF; border: 1px solid rgba(30,28,23,0.25); border-radius: 5px; align-self: center;"></div>
+            <svg viewBox="0 0 60 100" style="height: 100%; transform: scaleX(-1);">
+              <circle cx="30" cy="18" r="11" fill="#5C5A2E"></circle>
+              <path d="M 10 100 L 10 48 Q 10 30 30 30 Q 50 30 50 48 L 50 100 Z" fill="#5C5A2E"></path>
+            </svg>
+          </div>
+        </div>
+
+        <p style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 20px; line-height: 1.35; color: #FFFFFF; margin: 32px 0 0; max-width: 380px">
+          Hand it over like a business card. They scan it, they keep it. Once given, never lost.
+        </p>
+      </div>
+
+      <!-- The day of dozens -->
+      <div style="border: 1px solid rgba(92,90,46,0.2); border-radius: 14px; padding: 44px; background-color: #5C5A2E">
+        <h3 style="font-family: 'Marcellus', serif; font-weight: 400; font-size: 42px; line-height: 1; letter-spacing: -0.025em; margin: 0 0 36px; color: #FFFFFF">
+          For the day you<br>meet <em style="font-style: italic; color: #D98BA6">dozens.</em>
+        </h3>
+
+        <div style="aspect-ratio: 1.6 / 1; border: 1px solid rgba(92,90,46,0.15); border-radius: 10px; background: #FFFFFF; padding: 32px; display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; position: relative;">
+          <div style="display: flex; align-items: center; justify-content: center; position: relative;">
+            <div style="width: 72px; height: 44px; background: #1E1C17; border-radius: 5px; border: 1px solid #5C5A2E; position: relative;">
+              <div style="position: absolute; top: 50%; left: 50%; width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #5E1F35; transform: translate(-50%, -50%); animation: tapPulse 1s linear infinite;"></div>
+              <div style="position: absolute; top: 50%; left: 50%; width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #5E1F35; transform: translate(-50%, -50%); animation: tapPulse 1s linear infinite; animation-delay: 0.33s;"></div>
+              <div style="position: absolute; top: 50%; left: 50%; width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #5E1F35; transform: translate(-50%, -50%); animation: tapPulse 1s linear infinite; animation-delay: 0.66s;"></div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; justify-content: center;">
+            <div style="background: #FFFFFF; border: 1px solid rgba(92,90,46,0.15); border-radius: 6px; padding: 9px 12px; font-size: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: 'Marcellus', serif;">Nadia K.</span>
+              <span style="font-family: 'Marcellus', serif; font-style: italic; font-size: 11px; color: #5E1F35;">investor</span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid rgba(92,90,46,0.15); border-radius: 6px; padding: 9px 12px; font-size: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: 'Marcellus', serif;">Marco B.</span>
+              <span style="font-family: 'Marcellus', serif; font-style: italic; font-size: 11px; color: #5C5A2E;">client</span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid rgba(92,90,46,0.15); border-radius: 6px; padding: 9px 12px; font-size: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: 'Marcellus', serif;">Ines P.</span>
+              <span style="font-family: 'Marcellus', serif; font-style: italic; font-size: 11px; color: #5C5A2E;">warm intro</span>
+            </div>
+          </div>
+        </div>
+
+        <p style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 20px; line-height: 1.35; color: #FFFFFF; margin: 32px 0 0; max-width: 380px">
+          Keep one card. Let dozens scan it. Everyone connected, every detail saved.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section divider -->
+  <div style="display: flex; align-items: center; gap: 20px; padding: 0 56px;">
+    <div style="flex: 1; height: 1px; background: rgba(92,90,46,0.18);"></div>
+    <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 22px; color: #5E1F35;">§</div>
+    <div style="flex: 1; height: 1px; background: rgba(92,90,46,0.18);"></div>
+  </div>
+
+  <!-- 4. THE DASHBOARD -->
+  <section id="dashboard" style="padding: 120px 56px;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 56px;">
+      <h2 style="font-family: 'Marcellus', serif; font-weight: 400; font-size: 72px; line-height: 0.95; letter-spacing: -0.03em; margin: 0;">
+        Every contact,<br><em style="font-style: italic; color: #5E1F35;">remembered,<br>followed up.</em>
+      </h2>
+      <span style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 18px; color: #1E1C17; opacity: 0.55;">The Dashboard</span>
+    </div>
+
+    <div style="display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;">
+
+      <!-- Dashboard home (phone) -->
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="status"><span>9:41</span><span>●●●</span></div>
+          <div style="padding: 50px 18px 12px; background: #FFFFFF; position: relative; z-index: 10;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <div>
+                <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 4px;">Contacts</div>
+                <div style="font-family: 'Marcellus', serif; font-size: 22px; letter-spacing: -0.015em;">128 <em style="font-style: italic; color: #1E1C17; opacity: 0.5;">people</em></div>
+              </div>
+              <button style="width: 34px; height: 34px; border-radius: 50%; background: #5C5A2E; color: #F0EAD8; border: none; font-size: 18px; font-family: 'Montserrat', sans-serif; line-height: 1; padding: 0;">+</button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; background: #F5F2E9; border-radius: 10px; padding: 10px 12px;">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#1E1C17" stroke-width="1.3" opacity="0.5"></circle><line x1="9.5" y1="9.5" x2="12.5" y2="12.5" stroke="#1E1C17" stroke-width="1.3" opacity="0.5"></line></svg>
+              <span style="font-family: 'Montserrat', sans-serif; font-size: 12px; color: #1E1C17; opacity: 0.5;">Search name, tag, note…</span>
+            </div>
+          </div>
+          <div style="height: 1px; background: rgba(92,90,46,0.15);"></div>
+          <div style="padding: 4px 18px 20px; overflow-y: auto; height: calc(100% - 148px);">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 16px 0 10px;">
+              <div style="font-family: 'Marcellus', serif; font-size: 17px; letter-spacing: -0.01em;">Today</div>
+              <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C5A2E;">Jun 28</div>
+            </div>
+            <div style="display: flex; gap: 12px; padding: 12px; border: 1px solid rgba(92,90,46,0.18); border-radius: 10px; margin-bottom: 8px; align-items: center;">
+              <div style="width: 40px; height: 40px; border-radius: 50%; background: #1E1C17; flex-shrink: 0;"></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-family: 'Marcellus', serif; font-size: 15px; letter-spacing: -0.005em; margin-bottom: 2px;">Nadia Karim</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; color: #1E1C17; opacity: 0.6;">Partner, Loam Capital</div>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 9px; padding: 3px 7px; border-radius: 4px; color: #F0EAD8; background-color: #5E1F35">investor</div>
+                <div style="font-family: 'Marcellus', serif; font-size: 8px; color: #5C5A2E;">14:22</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px; padding: 12px; border: 1px solid rgba(92,90,46,0.18); border-radius: 10px; margin-bottom: 8px; align-items: center;">
+              <div style="width: 40px; height: 40px; border-radius: 50%; background: #5C5A2E; flex-shrink: 0;"></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-family: 'Marcellus', serif; font-size: 15px; letter-spacing: -0.005em; margin-bottom: 2px;">Marco Benetti</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; color: #1E1C17; opacity: 0.6;">Director, Roka Studio</div>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 9px; padding: 3px 7px; border-radius: 4px; border: 1px solid #5C5A2E; color: #5C5A2E;">client</div>
+                <div style="font-family: 'Marcellus', serif; font-size: 8px; color: #5C5A2E;">11:04</div>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 18px 0 10px;">
+              <div style="font-family: 'Marcellus', serif; font-size: 17px; letter-spacing: -0.01em;">Yesterday</div>
+              <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C5A2E;">Jun 27</div>
+            </div>
+            <div style="display: flex; gap: 12px; padding: 12px; border: 1px solid rgba(92,90,46,0.18); border-radius: 10px; margin-bottom: 8px; align-items: center;">
+              <div style="width: 40px; height: 40px; border-radius: 50%; background: #F5F2E9; border: 1px solid rgba(92,90,46,0.2); flex-shrink: 0;"></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-family: 'Marcellus', serif; font-size: 15px; letter-spacing: -0.005em; margin-bottom: 2px;">Ines Peña</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; color: #1E1C17; opacity: 0.6;">Designer, freelance</div>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 9px; padding: 3px 7px; border-radius: 4px; border: 1px solid rgba(30,28,23,0.2); color: #1E1C17;">warm intro</div>
+                <div style="font-family: 'Marcellus', serif; font-size: 8px; color: #5C5A2E;">18:40</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact detail (phone) -->
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="status dark"><span>9:41</span><span>●●●</span></div>
+          <div style="position: absolute; top: 50px; left: 18px; right: 18px; display: flex; justify-content: space-between; align-items: center; z-index: 12;">
+            <button style="background: transparent; border: none; color: #F0EAD8; font-family: 'Montserrat', sans-serif; font-size: 12px; padding: 0;">← Back</button>
+            <button style="background: transparent; border: 1px solid rgba(240,234,216,0.35); color: #F0EAD8; padding: 5px 12px; border-radius: 999px; font-family: 'Montserrat', sans-serif; font-size: 11px;">Edit</button>
+          </div>
+          <div style="width: 100%; padding: 56px 20px 18px; display: flex; gap: 14px; align-items: flex-end; position: relative; background-color: #5C5A2E; border-bottom: 1px solid rgba(240,234,216,0.15);">
+            <div style="width: 68px; height: 68px; border-radius: 50%; flex-shrink: 0; overflow: hidden; border: 2px solid rgba(240,234,216,0.9); background: #1E1C17; position: relative;">
+              <svg viewBox="0 0 68 68" style="width: 100%; height: 100%;">
+                <rect width="68" height="68" fill="#3d3b1e"></rect>
+                <circle cx="34" cy="26" r="12" fill="#F0EAD8" opacity="0.85"></circle>
+                <path d="M 9 68 L 9 51 Q 9 39 34 39 Q 59 39 59 51 L 59 68 Z" fill="#F0EAD8" opacity="0.85"></path>
+              </svg>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-family: 'Marcellus', serif; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: #F0EAD8; opacity: 0.65; margin-bottom: 5px;">Loam Capital</div>
+              <div style="font-family: 'Marcellus', serif; color: #F0EAD8; font-size: 22px; letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px;">Nadia Karim</div>
+              <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; color: #F0EAD8; opacity: 0.75; font-size: 12px; margin-bottom: 8px;">Partner</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                <span style="padding: 3px 7px; background: #5E1F35; color: #F0EAD8; border-radius: 999px; font-family: 'Montserrat', sans-serif; font-size: 9px;">investor</span>
+                <span style="padding: 3px 7px; border: 1px solid rgba(240,234,216,0.4); color: #F0EAD8; border-radius: 999px; font-family: 'Montserrat', sans-serif; font-size: 9px;">warm</span>
+                <span style="padding: 3px 7px; border: 1px solid rgba(240,234,216,0.4); color: #F0EAD8; border-radius: 999px; font-family: 'Montserrat', sans-serif; font-size: 9px;">seed</span>
+              </div>
+            </div>
+          </div>
+          <div style="padding: 18px 18px 24px; overflow-y: auto; height: calc(100% - 137px - 42px);">
+
+            <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 10px;">Contact</div>
+            <div style="display: flex; flex-direction: column; margin-bottom: 18px;">
+              <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 10px 4px; border-bottom: 1px solid rgba(92,90,46,0.15); text-decoration: none; color: #1E1C17;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><rect x="3" y="9" width="18" height="12" rx="1.5" stroke="#5C5A2E" stroke-width="1.6"></rect><rect x="3" y="3" width="4" height="4" fill="#5C5A2E"></rect><path d="M11 14 H17 M11 17 H15" stroke="#5C5A2E" stroke-width="1.6"></path></svg>
+                <div style="flex: 1; min-width: 0; font-family: 'Montserrat', sans-serif; font-size: 12px;">linkedin.com/in/nadiakarim</div>
+              </a>
+              <a href="mailto:nadia@loamcap.co" style="display: flex; align-items: center; gap: 10px; padding: 10px 4px; border-bottom: 1px solid rgba(92,90,46,0.15); text-decoration: none; color: #1E1C17;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="#5C5A2E" stroke-width="1.6"></rect><path d="M3.5 6 L12 13 L20.5 6" stroke="#5C5A2E" stroke-width="1.6" fill="none"></path></svg>
+                <div style="flex: 1; min-width: 0; font-family: 'Montserrat', sans-serif; font-size: 12px;">nadia@loamcap.co</div>
+              </a>
+              <a href="tel:+4791234567" style="display: flex; align-items: center; gap: 10px; padding: 10px 4px; border-bottom: 1px solid rgba(92,90,46,0.15); text-decoration: none; color: #1E1C17;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><path d="M5 3.5 L9 3.5 L11 8.5 L8 10.5 C9 13.5 10.5 15 13.5 16 L15.5 13 L20.5 15 L20.5 19 C20.5 20.5 19 21 17.5 20.7 C10 19 5 14 3.3 6.5 C3 5 3.5 3.5 5 3.5 Z" stroke="#5C5A2E" stroke-width="1.6" fill="none" stroke-linejoin="round"></path></svg>
+                <div style="flex: 1; min-width: 0; font-family: 'Montserrat', sans-serif; font-size: 12px;">+47 912 34 567</div>
+              </a>
+              <a href="https://loamcap.co" style="display: flex; align-items: center; gap: 10px; padding: 10px 4px; text-decoration: none; color: #1E1C17;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><circle cx="12" cy="12" r="9.5" stroke="#5C5A2E" stroke-width="1.6"></circle><path d="M2.5 12 H21.5 M12 2.5 C15.5 6 15.5 18 12 21.5 C8.5 18 8.5 6 12 2.5 Z" stroke="#5C5A2E" stroke-width="1.6" fill="none"></path></svg>
+                <div style="flex: 1; min-width: 0; font-family: 'Montserrat', sans-serif; font-size: 12px;">loamcap.co</div>
+              </a>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid rgba(92,90,46,0.15); border-bottom: 1px solid rgba(92,90,46,0.15); margin-bottom: 16px;">
+              <div>
+                <div style="font-family: 'Marcellus', serif; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 4px;">Met</div>
+                <div style="font-family: 'Marcellus', serif; font-size: 13px;">Jun 28 · Amsterdam</div>
+              </div>
+              <div>
+                <div style="font-family: 'Marcellus', serif; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 4px;">Via</div>
+                <div style="font-family: 'Marcellus', serif; font-size: 13px;">Tap · Nord conf.</div>
+              </div>
+            </div>
+            <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 8px;">Note</div>
+            <div style="border: 1px solid rgba(92,90,46,0.2); border-radius: 10px; padding: 12px; font-family: 'Montserrat', sans-serif; font-size: 12px; line-height: 1.5; color: #1E1C17; margin-bottom: 18px;">
+              Send the seed memo by mid-July. Prefers Signal.
+            </div>
+            <div style="font-family: 'Marcellus', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #5C5A2E; margin-bottom: 8px;">Reminder</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(92,90,46,0.2); border-radius: 10px; padding: 12px;">
+              <div>
+                <div style="font-family: 'Marcellus', serif; font-size: 14px; color: #5E1F35;">Follow up · Friday</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; opacity: 0.6; margin-top: 2px;">Jul 4 · 3 days</div>
+              </div>
+              <div style="width: 38px; height: 22px; background: #5C5A2E; border-radius: 999px; position: relative;">
+                <div style="position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; background: #F0EAD8; border-radius: 50%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section divider -->
+  <div style="display: flex; align-items: center; gap: 20px; padding: 0 56px;">
+    <div style="flex: 1; height: 1px; background: rgba(92,90,46,0.18);"></div>
+    <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 22px; color: #5E1F35;">§</div>
+    <div style="flex: 1; height: 1px; background: rgba(92,90,46,0.18);"></div>
+  </div>
+
+  <!-- 3. THE OBJECT -->
+  <section id="object" style="padding: 120px 56px;">
+    <div style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 80px; align-items: center;">
+
+      <div>
+        <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 18px; color: #1E1C17; opacity: 0.75; margin-bottom: 28px;">The NFC Card</div>
+        <h2 style="font-family: 'Marcellus', serif; font-weight: 400; font-size: 72px; line-height: 0.95; letter-spacing: -0.03em; margin: 0 0 40px; color: #1E1C17;">
+          Weight in<br>the hand.<br><em style="font-style: italic; color: #5E1F35;">Chip inside.</em>
+        </h2>
+
+        <!-- Finish toggle -->
+        <div>
+          <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 15px; color: #1E1C17; opacity: 0.75; margin-bottom: 18px;">choose your finish</div>
+          <div style="display: flex; gap: 14px;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+              <div style="width: 60px; height: 60px; border-radius: 50%; background: #1E1C17; border: 1.5px solid #5C5A2E; cursor: pointer;"></div>
+              <span style="font-family: 'Marcellus', serif; font-size: 13px; color: #1E1C17;">Ink</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+              <div style="width: 60px; height: 60px; border-radius: 50%; background: #FFFFFF; border: 1px solid rgba(30,28,23,0.2); cursor: pointer;"></div>
+              <span style="font-family: 'Marcellus', serif; font-size: 13px; color: #1E1C17; opacity: 0.7;">Ivory</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product photography placeholder -->
+      <div style="aspect-ratio: 1 / 1; border: 1px solid rgba(240,234,216,0.25); border-radius: 14px; background: repeating-linear-gradient(45deg, #6A6836, #6A6836 14px, #635F31 14px, #635F31 28px); position: relative; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 66%; aspect-ratio: 1.6 / 1; background: #1E1C17; border-radius: 12px; border: 1px solid rgba(240,234,216,0.4); transform: rotate(-5deg); padding: 30px 34px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="width: 32px; height: 22px; border-radius: 4px; border: 1px solid #F0EAD8; position: relative;">
+            <div style="position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border: 1px solid #F0EAD8; border-radius: 50%;"></div>
+          </div>
+          <div>
+            <div style="font-family: 'Marcellus', serif; font-size: 28px; color: #FFFFFF; letter-spacing: -0.015em;">Pham Ngoc Diep</div>
+            <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 14px; color: #F0EAD8; margin-top: 6px;">Founder, Olive-Wine</div>
+          </div>
+        </div>
+        <div style="position: absolute; bottom: 18px; left: 20px; font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 13px; color: #F0EAD8; opacity: 0.6;">picture shown is for illustration purpose only</div>
+      </div>
+
+    </div>
+  </section>
+
+  </div>
+
+  <!-- 5. RESERVE — full-width background -->
+  <section id="reserve" style="padding: 140px 56px; background: #5E1F35; color: #F0EAD8;">
+    <div style="max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 96px; align-items: center;">
+      <div>
+        <h2 style="font-family: 'Marcellus', serif; font-weight: 400; font-size: 84px; line-height: 0.92; letter-spacing: -0.035em; margin: 0 0 40px; color: #F0EAD8;">
+          Cheaper than<br>your <em style="font-style: italic; color: rgb(255, 255, 255);">meal.</em><br>Worth&nbsp;a deal.
+        </h2>
+        <p style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 22px; line-height: 1.35; color: #F0EAD8; opacity: 0.85; margin: 0; max-width: 460px;">
+          Don't miss your next deal for the price of a meal. Early reservations receive priority updates.
+        </p>
+      </div>
+
+      <div style="border: 1px solid rgba(240,234,216,0.3); border-radius: 14px; padding: 44px; background: #FFFFFF; color: #1E1C17;">
+        <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 15px; color: #5E1F35; margin-bottom: 28px;">I'm interested</div>
+
+        <label style="display: block; font-family: 'Marcellus', serif; font-style: italic; font-size: 13px; color: #1E1C17; opacity: 0.55; margin-bottom: 6px;">Name</label>
+        <input type="text" placeholder="Your full name" style="width: 100%; padding: 12px 0; border: none; border-bottom: 1px solid rgba(92,90,46,0.3); background: transparent; font-family: 'Marcellus', serif; font-size: 17px; color: #1E1C17; outline: none; margin-bottom: 26px;">
+
+        <label style="display: block; font-family: 'Marcellus', serif; font-style: italic; font-size: 13px; color: #1E1C17; opacity: 0.55; margin-bottom: 6px;">Email</label>
+        <input type="email" placeholder="you@company.com" style="width: 100%; padding: 12px 0; border: none; border-bottom: 1px solid rgba(92,90,46,0.3); background: transparent; font-family: 'Marcellus', serif; font-size: 17px; color: #1E1C17; outline: none; margin-bottom: 26px;">
+
+        <label style="display: block; font-family: 'Marcellus', serif; font-style: italic; font-size: 13px; color: #1E1C17; opacity: 0.55; margin-bottom: 6px;">Note (optional)</label>
+        <textarea rows="2" placeholder="Any lovely note for us?" style="width: 100%; padding: 12px 0; border: none; border-bottom: 1px solid rgba(92,90,46,0.3); background: transparent; font-family: 'Marcellus', serif; font-size: 17px; color: #1E1C17; outline: none; margin-bottom: 36px; resize: none;"></textarea>
+
+        <label style="display: flex; align-items: flex-start; gap: 12px; font-family: 'Marcellus', serif; font-size: 13px; line-height: 1.5; color: rgba(30,28,23,0.7); margin-bottom: 28px; cursor: pointer;">
+          <input type="checkbox" style="margin-top: 3px;">
+          <span>I agree to the <a href="#" style="color:#5E1F35; text-decoration: underline;">Terms &amp; Conditions</a> and have read the <a href="#" style="color:#5E1F35; text-decoration: underline;">Privacy Policy</a>. Contact me about my reservation and product updates.</span>
+        </label>
+
+        <button type="button" onclick="document.getElementById('success-popup').style.display='flex'" style="width: 100%; background: #5E1F35; color: #FFFFFF; border: none; padding: 18px; border-radius: 10px; font-family: 'Marcellus', serif; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px;">We'll be in touch with best service</button>
+
+        <div style="font-family: 'Marcellus', serif; font-style: italic; font-size: 13px; color: #1E1C17; opacity: 0.55; margin-top: 22px; text-align: center;">No payment now. Just a notice of reservation.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER — full-width background -->
+  <footer style="background: #5C5A2E; color: #FFFFFF; padding: 84px 56px 40px; margin-top: 40px;">
+    <div style="max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 44px; border-bottom: 1px solid #FFFFFF;">
+      <div>
+        <div style="font-family: 'Marcellus', serif; font-weight: 500; font-size: 26px; letter-spacing: -0.02em; margin-bottom: 18px;">Olive-Wine</div>
+        <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 20px; line-height: 1.35; opacity: 0.85; max-width: 300px;">A thoughtful way to connect</div>
+      </div>
+      <div>
+        <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 20px;">Product</div>
+        <div style="display: flex; flex-direction: column; gap: 12px; font-family: 'Marcellus', serif; font-size: 15px;"><a href="#object" style="color: inherit; text-decoration: none; opacity: 0.9;">The card</a><a href="#dashboard" style="color: inherit; text-decoration: none; opacity: 0.9;">The dashboard</a><a href="#reserve" style="color: inherit; text-decoration: none; opacity: 0.9;">Reserve</a></div>
+      </div>
+      <div>
+        <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 20px;">Company</div>
+        <div style="display: flex; flex-direction: column; gap: 12px; font-family: 'Marcellus', serif; font-size: 15px;"><a href="#" style="color: inherit; text-decoration: none; opacity: 0.9;">About</a><a href="#" style="color: inherit; text-decoration: none; opacity: 0.9;">Journal</a><a href="#" style="color: inherit; text-decoration: none; opacity: 0.9;">Contact</a></div>
+      </div>
+      <div>
+        <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 20px;">Legal</div>
+        <div style="display: flex; flex-direction: column; gap: 12px; font-family: 'Marcellus', serif; font-size: 15px;"><a href="#" style="color: inherit; text-decoration: none; opacity: 0.9;">Privacy</a><a href="#" style="color: inherit; text-decoration: none; opacity: 0.9;">Terms</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Popup (reserve success) -->
+  <div id="success-popup" onclick="if(event.target===this) this.style.display='none'" style="display:none; position: fixed; inset: 0; background: rgba(30,28,23,0.55); align-items: center; justify-content: center; z-index: 100;">
+    <div style="background: #FFFFFF; border: 1px solid rgba(92,90,46,0.5); border-radius: 14px; padding: 56px; max-width: 480px; text-align: center;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid #5E1F35; margin: 0 auto 28px; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 16px; height: 8px; border-left: 1.5px solid #5E1F35; border-bottom: 1.5px solid #5E1F35; transform: rotate(-45deg) translate(2px, -1px);"></div>
+      </div>
+      <div style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 15px; color: #5E1F35; margin-bottom: 16px;">Received</div>
+      <h3 style="font-family: 'Marcellus', serif; font-weight: 400; font-size: 36px; line-height: 1; letter-spacing: -0.025em; margin: 0 0 20px;">Your card is <em style="font-style: italic; color: #5E1F35;">on hold.</em></h3>
+      <p style="font-family: 'Marcellus', serif; font-style: italic; font-weight: 300; font-size: 17px; line-height: 1.4; color: #1E1C17; opacity: 0.7; margin: 0 0 32px;">Our team will reach out within 24 hours to walk through finishes and delivery.</p>
+      <button onclick="document.getElementById('success-popup').style.display='none'" style="background: transparent; color: #1E1C17; border: 1px solid rgba(92,90,46,0.3); padding: 12px 32px; border-radius: 10px; font-family: 'Marcellus', serif; font-size: 14px; cursor: pointer;">Close</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Ported from Hero.tsx: rAF-throttled scroll listener computing normalized progress (0..1),
+  // then a discrete scene index, same math as the real component.
+  (function () {
+    var SCENE_COUNT = 5;
+    var wrapper = document.getElementById('hero-wrapper');
+    var sticky = document.getElementById('hero-sticky');
+    var scenes = document.querySelectorAll('.hero-scene');
+    var progressBars = document.querySelectorAll('#hero-progress i');
+    var captionDesktop = document.getElementById('hero-caption-desktop');
+    var captionMobile = document.getElementById('hero-caption-mobile');
+    var scrollHint = document.getElementById('hero-scroll-hint');
+    var sceneBg = ['#1e1c17', '#3e3d31', '#5c5a2e', '#6a6836', '#72364b'];
+    var lines = ['YOU MEET', 'ONE TAP', 'CONNECT BOTH WAYS', 'MEET MANY', 'WHO, WHERE, WHY — NEVER LOST'];
+    var raf = 0;
+    var lastActive = -1;
+
+    function update() {
+      var rect = wrapper.getBoundingClientRect();
+      var scrollable = wrapper.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      var progress = Math.min(Math.max(-rect.top / scrollable, 0), 1);
+      var active = Math.min(Math.floor(progress * SCENE_COUNT), SCENE_COUNT - 1);
+
+      scenes.forEach(function (scene, i) {
+        scene.classList.toggle('active', i === active);
+      });
+      progressBars.forEach(function (bar, i) {
+        var fill = Math.min(Math.max(progress * SCENE_COUNT - i, 0), 1);
+        bar.style.width = (fill * 100) + '%';
+      });
+      sticky.style.backgroundColor = sceneBg[active];
+      scrollHint.style.opacity = progress > 0.04 ? '0' : '1';
+
+      if (active !== lastActive) {
+        captionDesktop.textContent = lines[active];
+        captionMobile.textContent = lines[active];
+        lastActive = active;
+      }
+    }
+
+    function onScroll() {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+</script>
+
+</body>
+</html>
